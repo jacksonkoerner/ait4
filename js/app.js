@@ -317,7 +317,7 @@ function saveUserProgress(progress) {
 /**
  * Update progress after completing a lab
  */
-function updateProgress(labId, score, userPrompt) {
+function updateProgress(labId, scoreData, userPrompt) {
     const progress = getUserProgress();
 
     if (!progress.completedLabs.includes(labId)) {
@@ -325,14 +325,21 @@ function updateProgress(labId, score, userPrompt) {
     }
 
     progress.scores[labId] = {
-        score: score,
+        finalScore: scoreData.finalScore,
+        techniqueScore: scoreData.techniqueScore,
+        techniques: scoreData.techniques,
+        // AI evaluation will be added in Part 2
+        aiScore: scoreData.aiScore || 0,
+        aiEvaluation: scoreData.aiEvaluation || null,
         userPrompt: userPrompt,
         completedAt: new Date().toISOString()
     };
 
-    // Recalculate total score
-    progress.totalScore = Object.values(progress.scores)
-        .reduce((sum, s) => sum + s.score, 0);
+    // Recalculate total score (average of all completed labs)
+    const scores = Object.values(progress.scores);
+    progress.totalScore = scores.length > 0
+        ? Math.round(scores.reduce((sum, s) => sum + s.finalScore, 0) / scores.length)
+        : 0;
 
     saveUserProgress(progress);
     return progress;
@@ -367,44 +374,103 @@ function resetProgress() {
 // ==================== Scoring ====================
 
 /**
- * Calculate score for a submission
- * Scoring breakdown:
- * - Base: 50 points (for completing)
- * - Quality: Up to 30 points (keyword matches)
- * - Time Bonus: Up to 20 points (efficiency reward)
- * - Hint Penalty: -10 points
- * Max possible: 100 points
+ * Detect prompting techniques used in the user's prompt
+ * Returns object with detected techniques and score
+ * Max score: 50 points
  */
-function calculateScore(userPrompt, lab) {
-    let score = 50; // Base score for submitting
-    const userLower = userPrompt.toLowerCase();
+function detectPromptTechniques(userPrompt) {
+    const prompt = userPrompt.toLowerCase();
+    const techniques = {};
+    let score = 0;
 
-    // Keyword matches (5 pts each, max 30)
-    const matches = lab.keywords.filter(kw => userLower.includes(kw.toLowerCase()));
-    const keywordScore = Math.min(matches.length * 5, 30);
-    score += keywordScore;
+    // 1. Output Format Specified (8 pts)
+    // Looking for: bullet, table, list, format, numbered, sections, headers, JSON, markdown, structure
+    const formatTerms = ['bullet', 'table', 'list', 'format', 'numbered', 'section', 'header', 'json', 'markdown', 'structure', 'organize', 'layout'];
+    techniques.outputFormat = formatTerms.some(term => prompt.includes(term));
+    if (techniques.outputFormat) score += 8;
 
-    // Time bonus - reward efficiency (up to 20 points)
-    // Based on percentage of time remaining
-    const timeUsed = getTimeElapsed();
-    const totalTime = lab.timeLimit;
-    const timeRemainingPercent = Math.max(0, (totalTime - timeUsed) / totalTime);
-    const timeBonus = Math.round(timeRemainingPercent * 20);
-    score += timeBonus;
+    // 2. Length/Limit Constraint (7 pts)
+    // Looking for: number + words/sentences/paragraphs OR max/limit/under/brief/concise
+    const hasNumber = /\d+/.test(prompt);
+    const lengthTerms = ['word', 'sentence', 'paragraph', 'character', 'max', 'limit', 'under', 'brief', 'concise', 'short', 'no more than', 'at most', 'maximum'];
+    techniques.lengthConstraint = lengthTerms.some(term => prompt.includes(term)) || (hasNumber && /\d+\s*(words?|sentences?|paragraphs?|characters?|lines?)/.test(prompt));
+    if (techniques.lengthConstraint) score += 7;
 
-    // Hint penalty
-    if (hintUsed) {
-        score = Math.max(score - 10, 50);
-    }
+    // 3. Audience/Role Defined (7 pts)
+    // Looking for: for a, as a, reader, audience, perspective, written for, targeting
+    const audienceTerms = ['for a ', 'as a ', 'reader', 'audience', 'perspective', 'written for', 'targeting', 'aimed at', 'business owner', 'executive', 'manager', 'client', 'customer', 'beginner', 'expert'];
+    techniques.audienceDefined = audienceTerms.some(term => prompt.includes(term));
+    if (techniques.audienceDefined) score += 7;
+
+    // 4. Tone Specified (7 pts)
+    // Looking for: tone, professional, friendly, formal, casual, confident, empathetic, direct, warm, serious
+    const toneTerms = ['tone', 'professional', 'friendly', 'formal', 'casual', 'confident', 'empathetic', 'direct', 'warm', 'serious', 'enthusiastic', 'neutral', 'conversational', 'authoritative'];
+    techniques.toneSpecified = toneTerms.some(term => prompt.includes(term));
+    if (techniques.toneSpecified) score += 7;
+
+    // 5. Negative Constraints (7 pts)
+    // Looking for: don't, avoid, without, never, do not, exclude, skip, no [noun], refrain
+    const negativePatterns = ["don't", "dont", "avoid", "without", "never", "do not", "exclude", "skip", "refrain", "no clich", "no fluff", "not include", "stay away"];
+    techniques.negativeConstraints = negativePatterns.some(term => prompt.includes(term));
+    if (techniques.negativeConstraints) score += 7;
+
+    // 6. Multiple Distinct Requirements (7 pts)
+    // Looking for: numbered lists (1. 2. 3.), multiple action verbs, or clear multi-part structure
+    const numberedList = /[1-9]\.\s|[1-9]\)\s|\*\s|-\s/.test(userPrompt);
+    const actionVerbs = ['include', 'add', 'create', 'write', 'generate', 'make', 'provide', 'list', 'explain', 'describe', 'summarize', 'analyze', 'compare', 'identify', 'highlight', 'show', 'calculate'];
+    const actionVerbCount = actionVerbs.filter(verb => prompt.includes(verb)).length;
+    techniques.multipleRequirements = numberedList || actionVerbCount >= 3;
+    if (techniques.multipleRequirements) score += 7;
+
+    // 7. Context Provided (7 pts)
+    // Looking for: substantial length AND contextual language
+    const contextTerms = ['context', 'background', 'situation', 'scenario', 'given that', 'considering', 'based on', 'the goal is', 'the purpose', 'this is for', 'i need', 'we need', 'the client', 'the customer'];
+    const hasContextLanguage = contextTerms.some(term => prompt.includes(term));
+    techniques.contextProvided = userPrompt.length > 150 && hasContextLanguage;
+    if (techniques.contextProvided) score += 7;
 
     return {
-        total: Math.min(score, 100),
-        base: 50,
-        keywords: keywordScore,
-        keywordMatches: matches,
-        timeBonus: timeBonus,
-        timeUsed: timeUsed,
-        hintPenalty: hintUsed ? -10 : 0
+        techniques,
+        score,
+        maxScore: 50
+    };
+}
+
+/**
+ * Get grade label based on score
+ */
+function getGradeLabel(score) {
+    if (score >= 90) return { label: 'Expert Prompter', stars: 5, color: '#10b981' };
+    if (score >= 80) return { label: 'Advanced', stars: 4, color: '#3b82f6' };
+    if (score >= 70) return { label: 'Proficient', stars: 3, color: '#8b5cf6' };
+    if (score >= 60) return { label: 'Developing', stars: 2, color: '#f59e0b' };
+    return { label: 'Beginner', stars: 1, color: '#ef4444' };
+}
+
+/**
+ * Render star rating
+ */
+function renderStars(count) {
+    return '⭐'.repeat(count) + '☆'.repeat(5 - count);
+}
+
+/**
+ * Calculate final score for a submission
+ * Currently uses only technique detection (AI scoring added in Part 2)
+ */
+function calculateFinalScore(userPrompt, lab) {
+    const techniqueResult = detectPromptTechniques(userPrompt);
+
+    // Temporarily scale technique score to 100 until AI scoring is added
+    // Once AI scoring is added, this will be: techniqueScore + aiScore
+    const scaledScore = Math.round((techniqueResult.score / 50) * 100);
+
+    return {
+        finalScore: scaledScore,
+        techniqueScore: techniqueResult.score,
+        techniques: techniqueResult.techniques,
+        aiScore: 0,
+        aiEvaluation: null
     };
 }
 
@@ -663,11 +729,11 @@ function autoSubmit() {
 async function processSubmission(userPrompt) {
     stopTimer();
 
-    // Calculate score
-    const scoreData = calculateScore(userPrompt, currentLab);
+    // Calculate new merit-based score
+    const scoreData = calculateFinalScore(userPrompt, currentLab);
 
-    // Update progress
-    updateProgress(currentLab.id, scoreData.total, userPrompt);
+    // Update progress with new format
+    updateProgress(currentLab.id, scoreData, userPrompt);
 
     // Show loading phase for all lab types when API is configured
     if (isApiConfigured('gemini')) {
@@ -1439,3 +1505,7 @@ window.getDocumentContext = getDocumentContext;
 window.navigateToLab = navigateToLab;
 window.navigateToCourse = navigateToCourse;
 window.isSetupComplete = isSetupComplete;
+window.detectPromptTechniques = detectPromptTechniques;
+window.calculateFinalScore = calculateFinalScore;
+window.getGradeLabel = getGradeLabel;
+window.renderStars = renderStars;
