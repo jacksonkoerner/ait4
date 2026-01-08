@@ -455,22 +455,46 @@ function renderStars(count) {
 }
 
 /**
- * Calculate final score for a submission
- * Currently uses only technique detection (AI scoring added in Part 2)
+ * Calculate final score using technique detection + AI evaluation
+ * Returns normalized score out of 100
  */
-function calculateFinalScore(userPrompt, lab) {
+async function calculateFinalScore(userPrompt, lab) {
+    // Part 1: Technique Detection (0-50 points)
     const techniqueResult = detectPromptTechniques(userPrompt);
 
-    // Temporarily scale technique score to 100 until AI scoring is added
-    // Once AI scoring is added, this will be: techniqueScore + aiScore
-    const scaledScore = Math.round((techniqueResult.score / 50) * 100);
+    // Part 2: AI Evaluation (0-50 points)
+    let aiResult;
+    try {
+        aiResult = await evaluatePromptWithAI(userPrompt, lab);
+    } catch (error) {
+        console.error('AI evaluation failed:', error);
+        // Fallback: scale technique score if AI fails
+        aiResult = {
+            scores: { specificity: 0, completeness: 0, structure: 0, actionability: 0, outputControl: 0 },
+            totalScore: 0,
+            strengths: ['Completed the challenge'],
+            improvements: ['AI evaluation unavailable'],
+            briefFeedback: 'Scored on technique detection only.',
+            error: true
+        };
+    }
+
+    // Combine scores (technique: 0-50, AI: 0-50, total: 0-100)
+    const rawTotal = techniqueResult.score + aiResult.totalScore;
+    const finalScore = Math.min(100, Math.round(rawTotal)); // Cap at 100
 
     return {
-        finalScore: scaledScore,
+        finalScore,
         techniqueScore: techniqueResult.score,
         techniques: techniqueResult.techniques,
-        aiScore: 0,
-        aiEvaluation: null
+        aiScore: aiResult.totalScore,
+        aiEvaluation: {
+            ...aiResult.scores,
+            strengths: aiResult.strengths,
+            improvements: aiResult.improvements,
+            briefFeedback: aiResult.briefFeedback,
+            error: aiResult.error || false
+        }
     };
 }
 
@@ -729,27 +753,31 @@ function autoSubmit() {
 async function processSubmission(userPrompt) {
     stopTimer();
 
-    // Calculate new merit-based score
-    const scoreData = calculateFinalScore(userPrompt, currentLab);
+    // Show loading state
+    setPhase('loading');
+    updateLoadingStatus('Analyzing your prompt...');
 
-    // Update progress with new format
+    // Set loading screen title and subtitle
+    const loadingTitle = document.getElementById('loading-title');
+    const loadingSubtitle = document.getElementById('loading-subtitle');
+    const loadingPromptText = document.getElementById('loading-prompt-text');
+
+    if (loadingTitle) loadingTitle.textContent = 'Evaluating Your Prompt';
+    if (loadingSubtitle) loadingSubtitle.textContent = 'AI is analyzing your prompt quality...';
+    if (loadingPromptText) loadingPromptText.textContent = userPrompt;
+
+    // Calculate score (now async due to AI evaluation)
+    const scoreData = await calculateFinalScore(userPrompt, currentLab);
+
+    // Update progress
     updateProgress(currentLab.id, scoreData, userPrompt);
 
-    // Show loading phase for all lab types when API is configured
+    // Continue with image/text generation if API is configured
     if (isApiConfigured('gemini')) {
-        // Show loading phase
-        setPhase('loading');
-
-        // Set loading screen title and subtitle based on lab type
-        const loadingTitle = document.getElementById('loading-title');
-        const loadingSubtitle = document.getElementById('loading-subtitle');
-        const loadingPromptText = document.getElementById('loading-prompt-text');
-
-        if (loadingPromptText) loadingPromptText.textContent = userPrompt;
-
         if (currentLab.type === 'image' && currentLab.requiresImageInput) {
             if (loadingTitle) loadingTitle.textContent = 'Generating Your Image';
             if (loadingSubtitle) loadingSubtitle.textContent = 'AI is transforming your image based on your prompt...';
+            updateLoadingStatus('Generating your output...');
 
             // Generate the image
             await generateUserImage(userPrompt);
@@ -757,19 +785,17 @@ async function processSubmission(userPrompt) {
             // Text/data labs
             if (loadingTitle) loadingTitle.textContent = 'Generating AI Outputs';
             if (loadingSubtitle) loadingSubtitle.textContent = 'Comparing your prompt against the expert prompt...';
+            updateLoadingStatus('Generating your output...');
 
             // Generate text outputs for comparison
             await generateTextOutputs(userPrompt);
         }
-
-        // Now show results
-        displayResults(userPrompt, scoreData);
-        setPhase('results');
-    } else {
-        // No API configured - show results without generation
-        displayResults(userPrompt, scoreData);
-        setPhase('results');
     }
+
+    // Prepare and display results
+    updateLoadingStatus('Preparing results...');
+    displayResults(userPrompt, scoreData);
+    setPhase('results');
 }
 
 /**
