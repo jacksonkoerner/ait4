@@ -1610,7 +1610,7 @@
                 <span class="logo-text">AI Prompt Lab</span>
             </a>
             <nav class="header-nav">
-                <a href="index.html" class="btn btn-primary btn-header">Start Course</a>
+                <a href="#" onclick="startCourse(); return false;" class="btn btn-primary btn-header">Start Course</a>
             </nav>
         </div>
     </header>
@@ -1640,7 +1640,7 @@
                 </div>
 
                 <div class="landing-hero-cta">
-                    <a href="index.html" class="btn btn-primary btn-lg btn-pulse">Start Free Training</a>
+                    <a href="#" onclick="startCourse(); return false;" class="btn btn-primary btn-lg btn-pulse">Start Free Training</a>
                     <a href="#labs" class="landing-secondary-link">See All 6 Labs ↓</a>
                 </div>
             </div>
@@ -2291,7 +2291,7 @@ Format as bullet points, max 200 words.</div>
             <div class="container">
                 <h2 class="landing-cta-title scroll-animate">Ready to Start?</h2>
                 <p class="landing-cta-subtitle scroll-animate">Free. No signup. Works on any device.</p>
-                <a href="index.html" class="btn btn-accent btn-lg btn-pulse scroll-animate">Begin Lab 1</a>
+                <a href="#" onclick="startCourse(); return false;" class="btn btn-accent btn-lg btn-pulse scroll-animate">Begin Lab 1</a>
 
                 <div class="partner-section scroll-animate">
                     <span class="partner-label">Powered by</span>
@@ -2312,6 +2312,30 @@ Format as bullet points, max 200 words.</div>
 
     <script>
         // ==================== LANDING PAGE JAVASCRIPT ====================
+
+        // Setup check constants
+        const SETUP_COMPLETE_KEY = 'aipromptlab_setup_complete';
+        const GEMINI_KEY_STORAGE = 'aipromptlab_gemini_key';
+
+        /**
+         * Check if setup is complete
+         */
+        function isSetupComplete() {
+            const setupComplete = localStorage.getItem(SETUP_COMPLETE_KEY) === 'true';
+            const hasApiKey = !!localStorage.getItem(GEMINI_KEY_STORAGE);
+            return setupComplete && hasApiKey;
+        }
+
+        /**
+         * Navigate to course with setup check
+         */
+        function startCourse() {
+            if (isSetupComplete()) {
+                window.location.href = 'index.html';
+            } else {
+                window.location.href = 'setup.html';
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', function() {
             setupScrollAnimations();

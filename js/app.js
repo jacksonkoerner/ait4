@@ -5,6 +5,7 @@
 
 // ==================== Constants ====================
 const PROGRESS_KEY = 'aipromptlab_progress';
+const SETUP_COMPLETE_KEY = 'aipromptlab_setup_complete';
 
 // ==================== State ====================
 let currentLab = null;
@@ -1218,6 +1219,40 @@ function renderLabContent() {
     document.title = `${currentLab.title} | AI Prompt Lab`;
 }
 
+// ==================== Setup Check ====================
+
+/**
+ * Check if setup is complete
+ */
+function isSetupComplete() {
+    const setupComplete = localStorage.getItem(SETUP_COMPLETE_KEY) === 'true';
+    const hasApiKey = !!localStorage.getItem(STORAGE_KEYS.GEMINI_KEY);
+    return setupComplete && hasApiKey;
+}
+
+/**
+ * Navigate to lab with setup check
+ * If setup is not complete, redirect to setup page first
+ */
+function navigateToLab(labId) {
+    if (isSetupComplete()) {
+        window.location.href = `lab.html?id=${labId}`;
+    } else {
+        window.location.href = 'setup.html';
+    }
+}
+
+/**
+ * Navigate to course/index with setup check
+ */
+function navigateToCourse() {
+    if (isSetupComplete()) {
+        window.location.href = 'index.html';
+    } else {
+        window.location.href = 'setup.html';
+    }
+}
+
 // ==================== Landing Page ====================
 
 /**
@@ -1251,7 +1286,7 @@ function initLandingPage() {
                 </div>
                 <div class="progress-text">${progress.completed}/${progress.total} completed</div>
             </div>
-            <button class="track-btn" onclick="window.location.href='lab.html?id=${firstLabId}'">
+            <button class="track-btn" onclick="navigateToLab(${firstLabId})">
                 ${progress.completed > 0 ? 'Continue' : 'Start'} Track →
             </button>
         `;
@@ -1401,3 +1436,6 @@ window.handleTestApi = handleTestApi;
 window.toggleDocumentExpand = toggleDocumentExpand;
 window.switchSheet = switchSheet;
 window.getDocumentContext = getDocumentContext;
+window.navigateToLab = navigateToLab;
+window.navigateToCourse = navigateToCourse;
+window.isSetupComplete = isSetupComplete;
