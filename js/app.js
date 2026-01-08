@@ -1089,10 +1089,11 @@ function goToNextLab() {
     if (nextLab) {
         window.location.href = `lab.html?id=${nextLab.id}`;
     } else {
+        // All labs completed - redirect to results page
         showToast('Congratulations! You\'ve completed all labs!', 'success');
         setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 2000);
+            window.location.href = 'results.html';
+        }, 1500);
     }
 }
 

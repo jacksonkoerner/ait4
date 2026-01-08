@@ -2277,3 +2277,429 @@ a:hover {
     border-radius: 8px;
     border: 1px solid var(--danger);
 }
+
+/* ==================== Results Page ==================== */
+
+.results-page-container {
+    min-height: calc(100vh - 70px);
+    padding: 2rem 0 4rem;
+}
+
+.results-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.celebration-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.results-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.results-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+}
+
+/* Overall Score Card */
+.overall-score-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 3rem;
+    background: var(--bg-card);
+    border-radius: 24px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 3rem;
+}
+
+.overall-score-circle {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.score-ring {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.score-ring-fill {
+    transition: stroke-dashoffset 1.5s ease-out;
+}
+
+.score-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.overall-score-value {
+    font-size: 3.5rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.overall-score-max {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.overall-grade {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.grade-label-large {
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.grade-stars-large {
+    font-size: 2rem;
+    letter-spacing: 4px;
+}
+
+/* Results Sections */
+.results-section {
+    margin-bottom: 3rem;
+}
+
+.results-section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+/* Track Results Grid */
+.track-results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+@media (max-width: 1024px) {
+    .track-results-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .track-results-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.track-result-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.track-result-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background: var(--bg-dark);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.track-result-icon {
+    font-size: 1.5rem;
+}
+
+.track-result-name {
+    flex: 1;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.track-result-avg {
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+}
+
+.track-labs-list {
+    padding: 1rem;
+}
+
+.track-lab-result {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.track-lab-result:last-child {
+    border-bottom: none;
+}
+
+.lab-name {
+    flex: 1;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.lab-score {
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+}
+
+.lab-stars {
+    font-size: 0.75rem;
+}
+
+/* Skills Grid */
+.skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.skill-breakdown-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+}
+
+.skill-breakdown-card h3 {
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+    color: var(--text-primary);
+}
+
+/* Skill Bars */
+.skill-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.skill-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.skill-bar-label {
+    width: 100px;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.skill-bar {
+    flex: 1;
+    height: 10px;
+    background: var(--bg-dark);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.skill-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 5px;
+    transition: width 1s ease-out;
+}
+
+.skill-bar-score {
+    width: 45px;
+    text-align: right;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-primary);
+}
+
+/* Technique Usage */
+.technique-usage {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.technique-usage-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+
+.technique-usage-row.good {
+    color: var(--accent);
+}
+
+.technique-usage-row.okay {
+    color: var(--warning);
+}
+
+.technique-usage-row.needs-work {
+    color: var(--text-muted);
+}
+
+.technique-usage-check {
+    width: 20px;
+    text-align: center;
+}
+
+.technique-usage-label {
+    flex: 1;
+    font-size: 0.875rem;
+}
+
+.technique-usage-count {
+    font-size: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Diagnostic Card */
+.diagnostic-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    min-height: 200px;
+}
+
+.diagnostic-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: var(--text-muted);
+    padding: 3rem;
+}
+
+.diagnostic-loading.hidden {
+    display: none;
+}
+
+.diagnostic-content p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.diagnostic-content p:last-child {
+    margin-bottom: 0;
+}
+
+.diagnostic-content strong {
+    color: var(--text-primary);
+}
+
+/* Results Actions */
+.results-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 2rem;
+}
+
+.modal-overlay.visible {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.2s;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+#share-canvas {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.share-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
