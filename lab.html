@@ -224,27 +224,65 @@
                 <!-- ==================== RESULTS PHASE ==================== -->
                 <div id="results-content" class="hidden">
                     <div class="lab-card fade-in">
-                        <!-- Score Section -->
+                        <!-- Score Section - Updated for Merit-Based Scoring -->
                         <div class="score-section">
                             <div class="score-label">Your Score</div>
                             <div class="score-value" id="score-value">0</div>
-                            <div class="score-breakdown">
-                                <div class="score-item">
-                                    <div class="score-item-value" id="base-score">+50</div>
-                                    <div class="score-item-label">Base</div>
+                            <div class="score-grade" id="score-grade">
+                                <span class="grade-label">Loading...</span>
+                                <span class="grade-stars">☆☆☆☆☆</span>
+                            </div>
+                        </div>
+
+                        <!-- Score Breakdown -->
+                        <div class="score-breakdown-detailed">
+                            <!-- Technique Detection -->
+                            <div class="score-card">
+                                <div class="score-card-header">
+                                    <span class="score-card-icon">🎯</span>
+                                    <span class="score-card-title">Technique Detection</span>
+                                    <span class="score-card-value" id="technique-score">0/50</span>
                                 </div>
-                                <div class="score-item">
-                                    <div class="score-item-value" id="keyword-score">+0</div>
-                                    <div class="score-item-label">Quality</div>
+                                <div class="technique-checklist" id="technique-checklist">
+                                    <!-- Filled by JavaScript -->
                                 </div>
-                                <div class="score-item">
-                                    <div class="score-item-value" id="time-bonus">+0</div>
-                                    <div class="score-item-label">Speed</div>
+                            </div>
+
+                            <!-- AI Evaluation -->
+                            <div class="score-card">
+                                <div class="score-card-header">
+                                    <span class="score-card-icon">🤖</span>
+                                    <span class="score-card-title">AI Evaluation</span>
+                                    <span class="score-card-value" id="ai-score">0/50</span>
                                 </div>
-                                <div class="score-item" id="hint-penalty-item" style="display: none;">
-                                    <div class="score-item-value" id="hint-penalty">0</div>
-                                    <div class="score-item-label">Hint</div>
+                                <div class="ai-dimensions" id="ai-dimensions">
+                                    <!-- Filled by JavaScript -->
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Feedback -->
+                        <div class="ai-feedback-section" id="ai-feedback-section">
+                            <div class="feedback-row">
+                                <div class="feedback-card strengths">
+                                    <div class="feedback-card-header">
+                                        <span>💪</span> Strengths
+                                    </div>
+                                    <ul class="feedback-list" id="strengths-list">
+                                        <!-- Filled by JavaScript -->
+                                    </ul>
+                                </div>
+                                <div class="feedback-card improvements">
+                                    <div class="feedback-card-header">
+                                        <span>🎯</span> Areas to Improve
+                                    </div>
+                                    <ul class="feedback-list" id="improvements-list">
+                                        <!-- Filled by JavaScript -->
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="brief-feedback" id="brief-feedback">
+                                <!-- AI's one-liner assessment -->
                             </div>
                         </div>
 
