@@ -383,6 +383,165 @@ async function generateTextWithContext(prompt, documentContent) {
     return data.candidates?.[0]?.content?.parts?.[0]?.text;
 }
 
+/**
+ * Evaluate a user's prompt using Gemini AI
+ * Returns scores on 5 dimensions plus feedback
+ * Max score: 50 points
+ */
+async function evaluatePromptWithAI(userPrompt, lab) {
+    const key = API_CONFIG.gemini.key;
+    if (!key) {
+        throw new Error('Gemini API key not configured');
+    }
+
+    const model = API_CONFIG.gemini.textModel;
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+
+    const evaluationPrompt = `You are evaluating a student's AI prompt for a training exercise. Be fair but rigorous.
+
+TASK GIVEN TO STUDENT:
+${lab.mission}
+
+CONTEXT/SCENARIO:
+${lab.scenario}
+
+STUDENT'S PROMPT:
+"""
+${userPrompt}
+"""
+
+EXPERT REFERENCE PROMPT (for comparison, student doesn't need to match exactly):
+"""
+${lab.expertPrompt}
+"""
+
+Rate the student's prompt on these 5 criteria (0-10 each):
+
+1. SPECIFICITY: How specific and detailed is the request?
+   - 0-3: Vague, generic, could apply to anything
+   - 4-6: Some specific details but missing key elements
+   - 7-10: Highly specific, detailed, tailored to the task
+
+2. COMPLETENESS: Does it address all aspects of the task?
+   - 0-3: Major gaps, misses the point
+   - 4-6: Covers basics but misses important elements
+   - 7-10: Comprehensive, addresses all requirements
+
+3. STRUCTURE: Is the prompt well-organized and clear?
+   - 0-3: Rambling, confusing, hard to follow
+   - 4-6: Understandable but could be clearer
+   - 7-10: Logical flow, well-organized, easy to follow
+
+4. ACTIONABILITY: Would an AI know exactly what to produce?
+   - 0-3: Ambiguous, unclear expected output
+   - 4-6: Mostly clear but some ambiguity
+   - 7-10: Crystal clear, AI knows exactly what to do
+
+5. OUTPUT_CONTROL: Does it specify format, length, style, or constraints?
+   - 0-3: No constraints specified
+   - 4-6: Some constraints but incomplete
+   - 7-10: Well-defined format, length, and style requirements
+
+Also provide:
+- Two specific strengths of this prompt
+- Two specific suggestions for improvement
+- One sentence overall assessment
+
+Respond ONLY with valid JSON (no markdown, no code blocks, just raw JSON):
+{
+  "specificity": <number 0-10>,
+  "completeness": <number 0-10>,
+  "structure": <number 0-10>,
+  "actionability": <number 0-10>,
+  "outputControl": <number 0-10>,
+  "strengths": ["<specific strength>", "<specific strength>"],
+  "improvements": ["<specific actionable suggestion>", "<specific actionable suggestion>"],
+  "briefFeedback": "<One sentence assessment>"
+}`;
+
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: evaluationPrompt }] }],
+                generationConfig: {
+                    maxOutputTokens: 500,
+                    temperature: 0.3  // Lower temperature for consistent scoring
+                }
+            })
+        });
+
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({}));
+            throw new Error(error.error?.message || 'AI evaluation failed');
+        }
+
+        const data = await response.json();
+        let resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (!resultText) {
+            throw new Error('No response from AI');
+        }
+
+        // Clean up response - remove markdown code blocks if present
+        resultText = resultText.trim();
+        if (resultText.startsWith('```json')) {
+            resultText = resultText.slice(7);
+        }
+        if (resultText.startsWith('```')) {
+            resultText = resultText.slice(3);
+        }
+        if (resultText.endsWith('```')) {
+            resultText = resultText.slice(0, -3);
+        }
+        resultText = resultText.trim();
+
+        const evaluation = JSON.parse(resultText);
+
+        // Calculate total AI score (sum of 5 dimensions, max 50)
+        const aiScore = (
+            (evaluation.specificity || 0) +
+            (evaluation.completeness || 0) +
+            (evaluation.structure || 0) +
+            (evaluation.actionability || 0) +
+            (evaluation.outputControl || 0)
+        );
+
+        return {
+            scores: {
+                specificity: evaluation.specificity || 0,
+                completeness: evaluation.completeness || 0,
+                structure: evaluation.structure || 0,
+                actionability: evaluation.actionability || 0,
+                outputControl: evaluation.outputControl || 0
+            },
+            totalScore: aiScore,
+            strengths: evaluation.strengths || ['Good effort', 'Completed the task'],
+            improvements: evaluation.improvements || ['Add more detail', 'Specify output format'],
+            briefFeedback: evaluation.briefFeedback || 'Keep practicing!'
+        };
+
+    } catch (error) {
+        console.error('AI evaluation error:', error);
+        // Return fallback scores if AI fails
+        return {
+            scores: {
+                specificity: 5,
+                completeness: 5,
+                structure: 5,
+                actionability: 5,
+                outputControl: 5
+            },
+            totalScore: 25,
+            strengths: ['Prompt submitted successfully', 'Attempted the challenge'],
+            improvements: ['AI evaluation unavailable', 'Try adding more specific details'],
+            briefFeedback: 'Score estimated - AI evaluation was unavailable.',
+            error: true
+        };
+    }
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', initializeApiConfig);
 
@@ -403,6 +562,7 @@ if (typeof module !== 'undefined' && module.exports) {
         loadDocument,
         loadCSVData,
         tryPromptWithApi,
-        imageToBase64
+        imageToBase64,
+        evaluatePromptWithAI
     };
 }
