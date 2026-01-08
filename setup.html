@@ -11,14 +11,219 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="css/styles.css">
-
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
 
     <style>
-        /* Setup Page Specific Styles */
+        /* ==================== ALL STYLES INLINE ==================== */
+
+        /* CSS Variables */
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --accent: #10b981;
+            --accent-hover: #059669;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --success: #10b981;
+            --danger: #ef4444;
+            --glass-bg: rgba(30, 41, 59, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Reset & Base */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 1.5rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: var(--bg-card);
+            text-decoration: none;
+        }
+
+        .settings-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            font-size: 1.25rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .settings-btn:hover {
+            background: var(--bg-card);
+            border-color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            text-decoration: none;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 2rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-text {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* ==================== SETUP PAGE STYLES ==================== */
+
         .setup-container {
             padding-top: 6rem;
             min-height: 100vh;
@@ -201,6 +406,7 @@
             color: var(--text-secondary);
             font-weight: 500;
             transition: color 0.2s ease;
+            user-select: none;
         }
 
         .expandable-header:hover {
@@ -249,6 +455,7 @@
             font-weight: 700;
             font-size: 0.8125rem;
             flex-shrink: 0;
+            color: white;
         }
 
         .step-content {
@@ -283,6 +490,10 @@
 
         /* Responsive */
         @media (max-width: 640px) {
+            .logo-text {
+                display: none;
+            }
+
             .setup-card {
                 margin: 1rem;
                 padding: 1.5rem;
@@ -312,9 +523,7 @@
             </a>
             <nav class="header-nav">
                 <a href="index.html" class="nav-link">Home</a>
-                <a href="settings.html" class="settings-btn" title="Settings">
-                    ⚙️
-                </a>
+                <a href="settings.html" class="settings-btn" title="Settings">⚙️</a>
             </nav>
         </div>
     </header>
@@ -329,7 +538,7 @@
                     <p>Your API key is configured and ready to go.</p>
                     <div class="already-setup-actions">
                         <a href="index.html" class="btn btn-primary">Start the Course</a>
-                        <button class="btn btn-secondary" onclick="showChangeKeyForm()">Change API Key</button>
+                        <button class="btn btn-secondary" id="change-key-btn">Change API Key</button>
                     </div>
                 </div>
 
@@ -374,7 +583,7 @@
 
                 <!-- Expandable Instructions -->
                 <div class="expandable-section" id="expandable-section">
-                    <div class="expandable-header">
+                    <div class="expandable-header" id="expandable-header">
                         <span>Need your own key?</span>
                         <span class="chevron">▼</span>
                     </div>
@@ -423,61 +632,79 @@
         </div>
     </footer>
 
-    <!-- Toast Container -->
-    <div id="toast-container" class="toast-container"></div>
-
-    <!-- Scripts -->
-    <script src="js/labs.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/app.js"></script>
+    <!-- ALL JAVASCRIPT INLINE - NO EXTERNAL DEPENDENCIES -->
     <script>
-        // Setup page specific JavaScript
-        const SETUP_COMPLETE_KEY = 'aipromptlab_setup_complete';
-        const GEMINI_KEY = 'aipromptlab_gemini_key';
+        // ==================== CONSTANTS ====================
+        var SETUP_COMPLETE_KEY = 'aipromptlab_setup_complete';
+        var GEMINI_KEY = 'aipromptlab_gemini_key';
 
+        // ==================== INITIALIZATION ====================
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Setup page loaded');
             initSetupPage();
         });
 
         function initSetupPage() {
-            // Initialize API config to load any existing key
-            if (typeof initializeApiConfig === 'function') {
-                initializeApiConfig();
-            }
+            console.log('Initializing setup page...');
 
-            const existingKey = localStorage.getItem(GEMINI_KEY);
-            const setupComplete = localStorage.getItem(SETUP_COMPLETE_KEY) === 'true';
+            // Check existing state
+            var existingKey = localStorage.getItem(GEMINI_KEY);
+            var setupComplete = localStorage.getItem(SETUP_COMPLETE_KEY) === 'true';
+
+            console.log('Existing key:', existingKey ? 'Yes' : 'No');
+            console.log('Setup complete:', setupComplete);
 
             if (setupComplete && existingKey) {
-                // Show "already set up" state
                 showAlreadySetup();
             } else if (existingKey) {
-                // Key exists but setup not marked complete - pre-fill the input
                 document.getElementById('api-key-input').value = existingKey;
             }
 
-            // Set up event listeners
-            var verifyBtn = document.getElementById('verify-btn');
-            var inputField = document.getElementById('api-key-input');
-            var expandableHeader = document.querySelector('.expandable-header');
+            // Set up all event listeners
+            setupEventListeners();
+        }
 
+        function setupEventListeners() {
+            // Verify button
+            var verifyBtn = document.getElementById('verify-btn');
             if (verifyBtn) {
-                verifyBtn.addEventListener('click', verifyAndContinue);
+                verifyBtn.onclick = function() {
+                    console.log('Verify button clicked');
+                    verifyAndContinue();
+                };
             }
 
+            // Enter key on input
+            var inputField = document.getElementById('api-key-input');
             if (inputField) {
-                inputField.addEventListener('keypress', function(e) {
+                inputField.onkeypress = function(e) {
                     if (e.key === 'Enter') {
+                        console.log('Enter key pressed');
                         verifyAndContinue();
                     }
-                });
+                };
             }
 
+            // Expandable header
+            var expandableHeader = document.getElementById('expandable-header');
             if (expandableHeader) {
-                expandableHeader.addEventListener('click', toggleInstructions);
+                expandableHeader.onclick = function() {
+                    console.log('Expandable header clicked');
+                    toggleInstructions();
+                };
+            }
+
+            // Change key button
+            var changeKeyBtn = document.getElementById('change-key-btn');
+            if (changeKeyBtn) {
+                changeKeyBtn.onclick = function() {
+                    console.log('Change key button clicked');
+                    showChangeKeyForm();
+                };
             }
         }
 
+        // ==================== UI FUNCTIONS ====================
         function showAlreadySetup() {
             document.getElementById('already-setup').classList.add('visible');
             document.getElementById('setup-header').style.display = 'none';
@@ -491,7 +718,7 @@
             document.getElementById('setup-form').style.display = 'block';
             document.getElementById('expandable-section').style.display = 'block';
 
-            // Update header text for changing key
+            // Update header text
             document.querySelector('.setup-header h1').textContent = 'Change Your API Key';
             document.querySelector('.setup-header .subtitle').textContent = 'Enter a new Gemini API key below';
             document.querySelector('.setup-header .explanation').textContent =
@@ -504,7 +731,13 @@
             }
         }
 
-        async function verifyAndContinue() {
+        function toggleInstructions() {
+            var section = document.getElementById('expandable-section');
+            section.classList.toggle('expanded');
+        }
+
+        // ==================== VERIFICATION ====================
+        function verifyAndContinue() {
             var input = document.getElementById('api-key-input');
             var verifyBtn = document.getElementById('verify-btn');
             var successStatus = document.getElementById('success-status');
@@ -512,6 +745,8 @@
             var errorMessage = document.getElementById('error-message');
 
             var apiKey = input.value.trim();
+
+            console.log('Verifying API key...');
 
             // Reset status
             successStatus.classList.remove('visible');
@@ -529,67 +764,56 @@
             verifyBtn.disabled = true;
             verifyBtn.innerHTML = '<span class="spinner"></span> Verifying...';
 
-            try {
-                // Save the key to localStorage first
-                localStorage.setItem(GEMINI_KEY, apiKey);
-
-                // Update API_CONFIG if available
-                if (typeof API_CONFIG !== 'undefined') {
-                    API_CONFIG.gemini.key = apiKey;
-                }
-
-                // Test the API key by making a request to Gemini
-                var response = await fetch(
-                    'https://generativelanguage.googleapis.com/v1beta/models?key=' + apiKey,
-                    { method: 'GET' }
-                );
+            // Test the API key
+            fetch('https://generativelanguage.googleapis.com/v1beta/models?key=' + apiKey, {
+                method: 'GET'
+            })
+            .then(function(response) {
+                console.log('API response status:', response.status);
 
                 if (response.status === 400 || response.status === 401) {
                     throw new Error('Invalid API key');
                 }
-
                 if (!response.ok) {
                     throw new Error('Unable to verify API key');
                 }
+                return response.json();
+            })
+            .then(function(data) {
+                console.log('API key verified successfully');
 
-                // Success! Mark setup complete
+                // Save the key
+                localStorage.setItem(GEMINI_KEY, apiKey);
                 localStorage.setItem(SETUP_COMPLETE_KEY, 'true');
 
                 // Show success state
                 successStatus.classList.add('visible');
                 verifyBtn.innerHTML = 'Start the Course →';
-                verifyBtn.classList.remove('btn-primary');
-                verifyBtn.classList.add('btn-accent');
+                verifyBtn.className = 'btn btn-accent verify-btn';
                 verifyBtn.disabled = false;
                 verifyBtn.onclick = function() {
                     window.location.href = 'index.html';
                 };
 
-                // Auto-redirect after a moment
+                // Auto-redirect after 1 second
                 setTimeout(function() {
                     window.location.href = 'index.html';
                 }, 1000);
+            })
+            .catch(function(error) {
+                console.error('Verification failed:', error);
 
-            } catch (error) {
-                // Error - show error state
+                // Show error
                 errorMessage.textContent = error.message || 'Invalid API key. Please check and try again.';
                 errorStatus.classList.add('visible');
 
-                // Clear the invalid key
+                // Don't save invalid key
                 localStorage.removeItem(GEMINI_KEY);
-                if (typeof API_CONFIG !== 'undefined') {
-                    API_CONFIG.gemini.key = '';
-                }
 
                 // Reset button
                 verifyBtn.disabled = false;
                 verifyBtn.innerHTML = 'Verify & Continue';
-            }
-        }
-
-        function toggleInstructions() {
-            var section = document.getElementById('expandable-section');
-            section.classList.toggle('expanded');
+            });
         }
     </script>
 </body>
