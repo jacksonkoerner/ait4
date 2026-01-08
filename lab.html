@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab | AI Prompt Lab</title>
+    <meta name="description" content="Complete timed AI prompting challenges and compare your results to expert examples.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🧪</div>
+                <span class="logo-text">AI Prompt Lab</span>
+            </a>
+            <nav class="header-nav">
+                <span id="progress-text" class="nav-link">Lab 1 of 6</span>
+                <a href="settings.html" class="settings-btn" title="Settings">
+                    ⚙️
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="lab-container">
+        <div class="container">
+            <!-- Lab Header -->
+            <div class="lab-header">
+                <div class="lab-nav">
+                    <a href="index.html" class="back-btn">← Back to Labs</a>
+                </div>
+                <div class="timer-display" id="timer">0:00</div>
+            </div>
+
+            <!-- Phase Indicator -->
+            <div class="phase-indicator">
+                <div class="phase-step">
+                    <div class="phase-dot active" data-phase="briefing">1</div>
+                </div>
+                <div class="phase-line"></div>
+                <div class="phase-step">
+                    <div class="phase-dot" data-phase="active">2</div>
+                </div>
+                <div class="phase-line"></div>
+                <div class="phase-step">
+                    <div class="phase-dot" data-phase="results">3</div>
+                </div>
+            </div>
+
+            <!-- Lab Content -->
+            <div class="lab-content">
+                <!-- ==================== BRIEFING & ACTIVE PHASE ==================== -->
+                <div id="briefing-content">
+                    <div class="lab-card fade-in">
+                        <!-- Lab Title & Badges -->
+                        <h1 class="lab-title" id="lab-title">Loading...</h1>
+                        <div class="lab-badges">
+                            <span class="badge badge-type" id="type-badge">Type</span>
+                            <span class="badge badge-time" id="time-badge">0s</span>
+                            <span class="difficulty-badge" id="difficulty-badge">Difficulty</span>
+                        </div>
+
+                        <!-- Scenario -->
+                        <div class="scenario-box">
+                            <div class="scenario-label">📋 Scenario</div>
+                            <p class="scenario-text" id="scenario-text">Loading scenario...</p>
+                        </div>
+
+                        <!-- Before/After Image Comparison (for image transformation labs) -->
+                        <div id="image-transform-container" class="hidden">
+                            <div class="transform-images-grid">
+                                <div class="transform-image-box">
+                                    <div class="transform-label">📷 BEFORE (Your Starting Image)</div>
+                                    <div class="transform-image-wrapper">
+                                        <img id="briefing-before-image" src="" alt="Before image" class="transform-image">
+                                        <div class="image-placeholder" id="briefing-before-placeholder">
+                                            <div class="image-placeholder-icon">🖼️</div>
+                                            <div class="image-placeholder-text">BEFORE IMAGE</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="transform-arrow">→</div>
+                                <div class="transform-image-box">
+                                    <div class="transform-label target">🎯 AFTER (Your Goal)</div>
+                                    <div class="transform-image-wrapper">
+                                        <img id="briefing-after-image" src="" alt="After image" class="transform-image">
+                                        <div class="image-placeholder" id="briefing-after-placeholder">
+                                            <div class="image-placeholder-icon">🖼️</div>
+                                            <div class="image-placeholder-text">AFTER IMAGE</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Why It Matters (for image labs) -->
+                        <div id="why-it-matters-box" class="hidden">
+                            <div class="why-box">
+                                <div class="why-label">💡 Why This Matters</div>
+                                <p class="why-text" id="why-it-matters-text"></p>
+                            </div>
+                        </div>
+
+                        <!-- Sample Input (for text labs) -->
+                        <div id="sample-input-box" class="hidden">
+                            <div class="scenario-box">
+                                <div class="scenario-label">📄 Input Data</div>
+                                <pre class="sample-text-box" id="sample-input-text"></pre>
+                            </div>
+                        </div>
+
+                        <!-- Mission -->
+                        <div class="mission-box">
+                            <div class="mission-label">🎯 Your Mission</div>
+                            <p class="mission-text" id="mission-text">Loading mission...</p>
+                        </div>
+
+                        <!-- Document Viewer (for document-based labs) -->
+                        <div id="document-viewer-section" class="hidden">
+                            <div class="document-viewer-container">
+                                <div class="document-viewer-header">
+                                    <div class="document-viewer-label">
+                                        <span id="document-icon">📄</span>
+                                        <span id="document-title">Document to Review</span>
+                                    </div>
+                                    <div class="document-viewer-actions">
+                                        <button class="btn btn-outline btn-sm" id="expand-doc-btn" onclick="toggleDocumentExpand()">
+                                            ⛶ Expand
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Tab Navigation for Excel files with multiple sheets -->
+                                <div id="sheet-tabs" class="sheet-tabs hidden">
+                                    <!-- Sheet tabs will be inserted here by JavaScript -->
+                                </div>
+
+                                <div class="document-viewer-content" id="document-viewer-content">
+                                    <!-- Document content will be rendered here -->
+                                    <div class="document-loading" id="document-loading">
+                                        <span class="spinner"></span> Loading document...
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Begin Button (Briefing Phase) -->
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-lg" id="begin-btn">
+                                ▶️ Begin Challenge
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== ACTIVE PHASE (Prompt Input) ==================== -->
+                <div id="active-content" class="hidden">
+                    <div class="lab-card fade-in">
+                        <div class="prompt-section">
+                            <label class="prompt-label" for="user-prompt">
+                                ✍️ Your Prompt
+                            </label>
+                            <textarea
+                                id="user-prompt"
+                                class="prompt-textarea"
+                                placeholder="Write your prompt here... Be specific, clear, and complete."
+                                disabled
+                            ></textarea>
+                            <div class="char-count" id="char-count">0 characters</div>
+                        </div>
+
+                        <!-- Hint Box -->
+                        <div class="hint-box" id="hint-box">
+                            <div class="hint-label">💡 Hint</div>
+                            <p class="hint-text" id="hint-text"></p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons">
+                            <button class="btn btn-outline hidden" id="hint-btn">
+                                💡 Show Hint (-10 pts)
+                            </button>
+                            <button class="btn btn-accent btn-lg hidden" id="submit-btn">
+                                🚀 Submit Prompt
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== LOADING PHASE (All Lab Types) ==================== -->
+                <div id="loading-content" class="hidden">
+                    <div class="lab-card fade-in">
+                        <div class="loading-overlay-content">
+                            <div class="loading-spinner-large"></div>
+                            <h2 class="loading-title" id="loading-title">Processing Your Prompt</h2>
+                            <p class="loading-subtitle" id="loading-subtitle">AI is analyzing your prompt and generating results...</p>
+                            <div class="loading-progress">
+                                <div class="loading-progress-bar">
+                                    <div class="loading-progress-fill"></div>
+                                </div>
+                                <p class="loading-status" id="loading-status">Processing prompt...</p>
+                            </div>
+                            <div class="loading-prompt-preview">
+                                <div class="loading-prompt-label">Your Prompt:</div>
+                                <p class="loading-prompt-text" id="loading-prompt-text"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== RESULTS PHASE ==================== -->
+                <div id="results-content" class="hidden">
+                    <div class="lab-card fade-in">
+                        <!-- Score Section -->
+                        <div class="score-section">
+                            <div class="score-label">Your Score</div>
+                            <div class="score-value" id="score-value">0</div>
+                            <div class="score-breakdown">
+                                <div class="score-item">
+                                    <div class="score-item-value" id="base-score">+50</div>
+                                    <div class="score-item-label">Base</div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-item-value" id="keyword-score">+0</div>
+                                    <div class="score-item-label">Quality</div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score-item-value" id="time-bonus">+0</div>
+                                    <div class="score-item-label">Speed</div>
+                                </div>
+                                <div class="score-item" id="hint-penalty-item" style="display: none;">
+                                    <div class="score-item-value" id="hint-penalty">0</div>
+                                    <div class="score-item-label">Hint</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ==================== IMAGE LAB RESULTS ==================== -->
+                        <div id="image-results-section" class="hidden">
+                            <!-- User's Result vs Original -->
+                            <div class="image-comparison-block">
+                                <h3 class="comparison-title">👤 Your Result vs Original</h3>
+                                <div class="slider-container" id="user-slider">
+                                    <div class="slider-images">
+                                        <img id="user-slider-before" class="slider-image before" src="" alt="Original">
+                                        <img id="user-slider-after" class="slider-image after" src="" alt="Your result">
+                                        <div class="slider-handle" id="user-slider-handle"></div>
+                                        <div class="slider-placeholder" id="user-slider-placeholder">
+                                            <span class="spinner"></span> Generating your image...
+                                        </div>
+                                    </div>
+                                    <input type="range" class="slider-input" id="user-slider-input" min="0" max="100" value="50">
+                                </div>
+                                <div class="slider-labels">
+                                    <span class="slider-label">Original</span>
+                                    <span class="slider-label">Your Generated</span>
+                                </div>
+                                <div class="prompt-display user-prompt-display">
+                                    <div class="prompt-display-label">Your Prompt:</div>
+                                    <p class="prompt-display-text" id="user-prompt-display"></p>
+                                </div>
+                            </div>
+
+                            <!-- User's Result vs Expert/Target -->
+                            <div class="image-comparison-block">
+                                <h3 class="comparison-title">⭐ Your Result vs Target</h3>
+                                <div class="slider-container" id="compare-slider">
+                                    <div class="slider-images">
+                                        <img id="compare-slider-before" class="slider-image before" src="" alt="Your result">
+                                        <img id="compare-slider-after" class="slider-image after" src="" alt="Target result">
+                                        <div class="slider-handle" id="compare-slider-handle"></div>
+                                        <div class="slider-placeholder" id="compare-slider-placeholder">
+                                            <span>Loading comparison...</span>
+                                        </div>
+                                    </div>
+                                    <input type="range" class="slider-input" id="compare-slider-input" min="0" max="100" value="50">
+                                </div>
+                                <div class="slider-labels">
+                                    <span class="slider-label">Your Generated</span>
+                                    <span class="slider-label">Target (Expert Result)</span>
+                                </div>
+                                <div class="prompt-display expert-prompt-display">
+                                    <div class="prompt-display-label">Expert Prompt:</div>
+                                    <p class="prompt-display-text" id="expert-prompt-display"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ==================== TEXT LAB RESULTS ==================== -->
+                        <div id="text-results-section" class="hidden">
+                            <h3 class="mt-4 mb-3">Compare Prompts</h3>
+                            <div class="comparison-grid">
+                                <div class="comparison-card">
+                                    <div class="comparison-label user">👤 Your Prompt</div>
+                                    <p class="comparison-text" id="user-prompt-result"></p>
+                                </div>
+                                <div class="comparison-card expert">
+                                    <div class="comparison-label expert">⭐ Expert Prompt</div>
+                                    <p class="comparison-text" id="expert-prompt"></p>
+                                </div>
+                            </div>
+
+                            <!-- AI Output Comparison -->
+                            <div id="ai-output-comparison" class="mt-4">
+                                <h3 class="mb-3">Compare AI Outputs</h3>
+                                <div class="comparison-grid">
+                                    <div class="comparison-card">
+                                        <div class="comparison-label user">👤 Output from Your Prompt</div>
+                                        <div class="ai-output-text" id="user-ai-output">
+                                            <div class="ai-output-loading" id="user-output-loading">
+                                                <span class="spinner"></span> Generating...
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="comparison-card expert">
+                                        <div class="comparison-label expert">⭐ Output from Expert Prompt</div>
+                                        <div class="ai-output-text" id="expert-ai-output">
+                                            <div class="ai-output-loading" id="expert-output-loading">
+                                                <span class="spinner"></span> Generating...
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Takeaways -->
+                        <div class="takeaways-section mt-4">
+                            <h3 class="takeaways-title">💡 Key Takeaways</h3>
+                            <ul class="takeaways-list" id="takeaways-list">
+                                <!-- Takeaways inserted by JavaScript -->
+                            </ul>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons mt-4">
+                            <button class="btn btn-primary btn-lg" id="next-btn">
+                                Next Lab →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Document Viewing Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+
+    <!-- Scripts -->
+    <script src="js/labs.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

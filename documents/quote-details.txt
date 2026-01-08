@@ -1,0 +1,54 @@
+JOB QUOTE REQUEST DETAILS
+=========================
+
+CUSTOMER INFORMATION:
+- Company: Riverside Medical Center
+- Contact: Dr. Patricia Vance, COO
+- Email: pvance@riversidemedical.example.com
+- Phone: (972) 555-0234
+- Address: 8900 Healthcare Parkway, Building C, Irving, TX 75063
+
+PROJECT SCOPE:
+Replace aging HVAC system in Outpatient Surgery Wing (12,000 sq ft)
+- Current system: 20-year-old Trane package units (3 units)
+- Compliance requirement: Must meet healthcare facility air quality standards
+- Timeline constraint: Work must occur on weekends only (Sat-Sun) to avoid disrupting patient care
+
+EQUIPMENT PROPOSED:
+1. Primary Equipment:
+   - 3x Carrier WeatherExpert 50XC rooftop units, 15-ton each
+   - Unit cost: $18,500 each
+   - Healthcare-grade filtration upgrade: $2,200 per unit
+
+2. Controls & Thermostats:
+   - 1x Carrier i-Vu building automation interface: $4,500
+   - 6x Programmable zone thermostats: $350 each
+
+3. Ductwork Modifications:
+   - Estimated materials: $8,500
+   - Includes UV-C sanitization units for each supply plenum: $1,800 each
+
+LABOR ESTIMATE:
+- Removal of existing equipment: 16 hours @ $95/hr
+- Installation of new units: 48 hours @ $95/hr
+- Ductwork modifications: 24 hours @ $85/hr
+- Controls programming & commissioning: 8 hours @ $110/hr
+- Project management: 12 hours @ $75/hr
+
+ADDITIONAL COSTS:
+- Crane rental (2 weekends): $3,200
+- Permits and inspections: $1,850
+- Disposal of old equipment: $950
+- Weekend work premium: 15% on labor
+
+WARRANTY:
+- Equipment: 10-year parts, 1-year labor (manufacturer)
+- Installation workmanship: 2 years
+- Extended labor warranty available: +$2,400 for 5-year coverage
+
+PAYMENT TERMS:
+- 40% deposit upon contract signing
+- 40% upon equipment delivery
+- 20% upon project completion and final inspection
+
+VALIDITY: Quote valid for 30 days from issue date

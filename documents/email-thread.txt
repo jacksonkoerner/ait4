@@ -1,0 +1,68 @@
+EMAIL THREAD: Project Delay Communication
+=========================================
+
+--- EMAIL 1 (Sent: Monday, 9:15 AM) ---
+From: mike.torres@abcmanufacturing.com
+To: you@yourcompany.com
+Subject: HVAC Installation Schedule Confirmation
+
+Hi,
+
+Just wanted to confirm we're still on track for the rooftop unit installation
+starting this Wednesday. Our production team has scheduled downtime for
+Wednesday through Friday specifically for this project.
+
+Please confirm the crew will arrive at 7 AM as discussed.
+
+Thanks,
+Mike Torres
+Facilities Manager
+ABC Manufacturing
+
+---
+
+--- EMAIL 2 (Sent: Tuesday, 4:45 PM) ---
+From: you@yourcompany.com
+To: mike.torres@abcmanufacturing.com
+Subject: RE: HVAC Installation Schedule Confirmation
+
+Mike,
+
+I need to let you know we've hit an unexpected delay. The crane rental company
+double-booked our equipment, and the earliest availability is now next Monday.
+
+I understand this is frustrating given your production schedule. We're actively
+looking for alternative crane providers.
+
+I'll update you tomorrow with options.
+
+Best,
+[Your Name]
+
+---
+
+--- EMAIL 3 (Sent: Wednesday, 8:30 AM) ---
+From: mike.torres@abcmanufacturing.com
+To: you@yourcompany.com
+Subject: RE: RE: HVAC Installation Schedule Confirmation
+
+This is really disappointing. We've had 47 employees sitting idle since 7 AM
+waiting for your crew. That's over $4,000 in wasted labor costs already this morning,
+not counting the lost production.
+
+I specifically confirmed this timeline THREE times over the past two weeks.
+Our CFO is asking questions and I don't have good answers.
+
+What exactly are our options here? When can you GUARANTEE the work will be done?
+We cannot afford another false start.
+
+Mike
+
+---
+
+YOUR TASK: Write a response to Mike's third email that:
+- Acknowledges the impact on their business
+- Takes responsibility without making excuses
+- Provides concrete solutions with specific dates
+- Offers compensation for the inconvenience
+- Maintains the business relationship

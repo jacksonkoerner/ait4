@@ -1,0 +1,2383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Lab | Master AI Prompting in 30 Minutes</title>
+    <meta name="description" content="6 hands-on labs. 30 minutes. Real business scenarios. Learn to prompt AI through timed challenges - not theory.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+
+    <style>
+        /* ==================== CSS VARIABLES ==================== */
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --accent: #10b981;
+            --accent-hover: #059669;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --glass-bg: rgba(30, 41, 59, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+
+            /* Track colors */
+            --track-text: linear-gradient(135deg, #f59e0b, #ef4444);
+            --track-finance: linear-gradient(135deg, #10b981, #14b8a6);
+            --track-marketing: linear-gradient(135deg, #8b5cf6, #6366f1);
+
+            /* Difficulty colors */
+            --diff-easy: #10b981;
+            --diff-medium: #f59e0b;
+            --diff-hard: #ef4444;
+        }
+
+        /* ==================== RESET & BASE ==================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ==================== TYPOGRAPHY ==================== */
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 3rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            h3 { font-size: 1.25rem; }
+        }
+
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--accent);
+        }
+
+        /* ==================== LAYOUT ==================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* ==================== HEADER ==================== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* ==================== BUTTONS ==================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+
+        .btn-header {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+        }
+
+        .footer a {
+            color: var(--accent);
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+        }
+
+        /* ==================== LANDING HERO ==================== */
+        .landing-hero {
+            position: relative;
+            padding: 8rem 0 3rem;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero-gradient-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(37, 99, 235, 0.3), transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(16, 185, 129, 0.2), transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.15), transparent 60%);
+            animation: gradientShift 15s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            33% {
+                transform: scale(1.1) rotate(2deg);
+                opacity: 0.8;
+            }
+            66% {
+                transform: scale(0.95) rotate(-2deg);
+                opacity: 0.9;
+            }
+        }
+
+        .landing-hero .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .landing-hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--primary), var(--accent));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGradient 5s ease infinite;
+        }
+
+        @keyframes titleGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .landing-hero-tagline {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .hero-features {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+        }
+
+        .hero-feature-icon {
+            font-size: 1.125rem;
+        }
+
+        .hero-feature-highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .landing-hero-cta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-pulse {
+            position: relative;
+            animation: buttonPulse 2s ease-in-out infinite;
+        }
+
+        .btn-pulse::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 10px;
+            background: inherit;
+            z-index: -1;
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes buttonPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.15); }
+        }
+
+        .landing-secondary-link {
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .landing-secondary-link:hover {
+            color: var(--primary);
+        }
+
+        /* ==================== STATS SECTION (COMPACT) ==================== */
+        .landing-stats-compact {
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .stats-grid-compact {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item-compact {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .stat-value-compact {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label-compact {
+            font-size: 0.875rem;
+        }
+
+        /* ==================== HOW IT WORKS (COMPACT) ==================== */
+        .landing-how-it-works {
+            padding: 3rem 0;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(37, 99, 235, 0.03) 50%, var(--bg-dark) 100%);
+        }
+
+        .how-it-works-compact {
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .how-step-compact {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 0.875rem 1.25rem;
+            flex: 1;
+            min-width: 240px;
+            max-width: 320px;
+        }
+
+        .how-step-compact:hover {
+            border-color: var(--primary);
+        }
+
+        .how-step-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8125rem;
+            flex-shrink: 0;
+        }
+
+        .how-step-content h3 {
+            font-size: 0.9375rem;
+            margin-bottom: 0.125rem;
+            color: var(--text-primary);
+        }
+
+        .how-step-content p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        /* ==================== THE 6 LABS SECTION ==================== */
+        .labs-section {
+            padding: 4rem 0;
+        }
+
+        .labs-section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .labs-section-title {
+            font-size: 2.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .labs-section-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Track Groups */
+        .track-group {
+            margin-bottom: 3rem;
+        }
+
+        .track-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .track-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .track-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .track-icon.text { background: var(--track-text); }
+        .track-icon.finance { background: var(--track-finance); }
+        .track-icon.marketing { background: var(--track-marketing); }
+
+        .track-info h3 {
+            font-size: 1.375rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .track-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .track-difficulty {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .track-difficulty.easy { color: var(--diff-easy); }
+        .track-difficulty.medium { color: var(--diff-medium); }
+        .track-difficulty.hard { color: var(--diff-hard); }
+
+        /* Lab Cards Grid */
+        .labs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.25rem;
+        }
+
+        /* Lab Card */
+        .lab-card {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .lab-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .lab-card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .lab-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.125rem;
+            flex-shrink: 0;
+        }
+
+        .lab-number.text { background: var(--track-text); }
+        .lab-number.finance { background: var(--track-finance); }
+        .lab-number.marketing { background: var(--track-marketing); }
+
+        .lab-title-wrap {
+            flex: 1;
+        }
+
+        .lab-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.375rem;
+            color: var(--text-primary);
+        }
+
+        .lab-badges {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .lab-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.6875rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .lab-badge-track {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        .lab-badge-difficulty {
+            color: white;
+        }
+
+        .lab-badge-difficulty.easy { background: var(--diff-easy); }
+        .lab-badge-difficulty.medium { background: var(--diff-medium); }
+        .lab-badge-difficulty.hard { background: var(--diff-hard); }
+
+        .lab-badge-time {
+            background: rgba(37, 99, 235, 0.2);
+            color: var(--primary);
+        }
+
+        .lab-description {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        /* ==================== MARKETING PREVIEW (with images) ==================== */
+        .marketing-preview {
+            padding: 4rem 0;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(139, 92, 246, 0.05) 50%, var(--bg-dark) 100%);
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .preview-header h2 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .transformation-cards {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .transformation-card {
+            position: relative;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 300px;
+            flex: 1;
+            min-width: 240px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .transformation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .transformation-badge {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            z-index: 1;
+        }
+
+        .transformation-image-wrapper {
+            aspect-ratio: 4/3;
+            overflow: hidden;
+        }
+
+        .transformation-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .transformation-card:hover .transformation-image {
+            transform: scale(1.05);
+        }
+
+        .transformation-caption {
+            padding: 0.875rem;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .transformation-arrow {
+            font-size: 1.75rem;
+            color: var(--primary);
+            animation: arrowPulse 1.5s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes arrowPulse {
+            0%, 100% { transform: translateX(0); opacity: 1; }
+            50% { transform: translateX(5px); opacity: 0.7; }
+        }
+
+        /* ==================== FINAL CTA ==================== */
+        .landing-final-cta {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(16, 185, 129, 0.15));
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .landing-cta-title {
+            font-size: 2.25rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.2;
+        }
+
+        .landing-cta-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .partner-section {
+            margin-top: 1.5rem;
+        }
+
+        .partner-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+        }
+
+        .partner-link {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        /* ==================== SCROLL ANIMATIONS ==================== */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .scroll-animate[data-delay="100"] { transition-delay: 0.1s; }
+        .scroll-animate[data-delay="200"] { transition-delay: 0.2s; }
+        .scroll-animate[data-delay="300"] { transition-delay: 0.3s; }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 1024px) {
+            .labs-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .landing-hero {
+                padding: 7rem 0 2.5rem;
+            }
+
+            .landing-hero-title {
+                font-size: 2.25rem;
+            }
+
+            .landing-hero-tagline {
+                font-size: 1.25rem;
+            }
+
+            .hero-features {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .labs-section {
+                padding: 3rem 0;
+            }
+
+            .labs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .transformation-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .transformation-arrow {
+                transform: rotate(90deg);
+            }
+
+            .transformation-card {
+                max-width: 320px;
+            }
+
+            .landing-cta-title {
+                font-size: 1.75rem;
+            }
+
+            .landing-final-cta {
+                padding: 3rem 0;
+            }
+
+            .track-header {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header-content {
+                padding: 0.75rem 1rem;
+            }
+
+            .logo-text {
+                display: none;
+            }
+
+            .stats-grid-compact {
+                gap: 1rem;
+            }
+
+            .how-step-compact {
+                min-width: 100%;
+                max-width: none;
+            }
+
+            .lab-card {
+                padding: 1.25rem;
+            }
+
+            .lab-card-header {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .lab-number {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .landing-hero-title {
+                font-size: 1.75rem;
+            }
+
+            .labs-section-title {
+                font-size: 1.75rem;
+            }
+
+            .track-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.25rem;
+            }
+
+            .track-info h3 {
+                font-size: 1.125rem;
+            }
+        }
+
+        /* ==================== WHY LEARN AI SECTION ==================== */
+        .why-learn-section {
+            padding: 4rem 0;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(16, 185, 129, 0.05) 50%, var(--bg-dark) 100%);
+        }
+
+        .why-learn-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .why-learn-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .why-learn-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .stat-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card-label {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .why-learn-hook {
+            text-align: center;
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(16, 185, 129, 0.1));
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .why-learn-hook span {
+            color: var(--accent);
+        }
+
+        /* ==================== SKILLS GRID SECTION ==================== */
+        .skills-section {
+            padding: 4rem 0;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(37, 99, 235, 0.05) 50%, var(--bg-dark) 100%);
+        }
+
+        .skills-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .skills-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .skills-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .skill-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .skill-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .skill-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .skill-desc {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* ==================== PROMPT COMPARISON SECTION ==================== */
+        .comparison-section {
+            padding: 4rem 0;
+            background: var(--bg-dark);
+        }
+
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .comparison-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .comparison-card {
+            background: var(--glass-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .comparison-card.weak {
+            border-color: var(--danger);
+        }
+
+        .comparison-card.expert {
+            border-color: var(--success);
+        }
+
+        .comparison-card-header {
+            padding: 0.875rem 1.25rem;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .comparison-card.weak .comparison-card-header {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+        }
+
+        .comparison-card.expert .comparison-card-header {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+        }
+
+        .comparison-card-body {
+            padding: 1.25rem;
+        }
+
+        .prompt-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }
+
+        .comparison-insights {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .comparison-insights h4 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .insights-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .insight-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .insight-icon {
+            color: var(--success);
+        }
+
+        @media (max-width: 768px) {
+            .comparison-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ==================== JOURNEY TIMELINE SECTION ==================== */
+        .journey-section {
+            padding: 4rem 0;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(139, 92, 246, 0.05) 50%, var(--bg-dark) 100%);
+        }
+
+        .journey-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .journey-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .journey-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .journey-timeline {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 1rem;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        .journey-step {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            flex: 1;
+            min-width: 280px;
+            max-width: 350px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .journey-step:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .journey-step.easy { border-top: 3px solid var(--diff-easy); }
+        .journey-step.medium { border-top: 3px solid var(--diff-medium); }
+        .journey-step.hard { border-top: 3px solid var(--diff-hard); }
+
+        .journey-time {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.75rem;
+        }
+
+        .journey-step.easy .journey-time { color: var(--diff-easy); }
+        .journey-step.medium .journey-time { color: var(--diff-medium); }
+        .journey-step.hard .journey-time { color: var(--diff-hard); }
+
+        .journey-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .journey-difficulty {
+            font-size: 0.6875rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            color: white;
+        }
+
+        .journey-step.easy .journey-difficulty { background: var(--diff-easy); }
+        .journey-step.medium .journey-difficulty { background: var(--diff-medium); }
+        .journey-step.hard .journey-difficulty { background: var(--diff-hard); }
+
+        .journey-desc {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .journey-connector {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        @media (max-width: 1024px) {
+            .journey-timeline {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .journey-connector {
+                transform: rotate(90deg);
+            }
+
+            .journey-step {
+                max-width: 100%;
+            }
+        }
+
+        /* ==================== WHO IS THIS FOR SECTION ==================== */
+        .personas-section {
+            padding: 4rem 0;
+            background: var(--bg-dark);
+        }
+
+        .personas-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .personas-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .personas-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .personas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .persona-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .persona-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .persona-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .persona-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .persona-desc {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        /* ==================== SCORING SECTION ==================== */
+        .scoring-section {
+            padding: 4rem 0;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(245, 158, 11, 0.05) 50%, var(--bg-dark) 100%);
+        }
+
+        .scoring-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .scoring-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .scoring-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .scoring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .scoring-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .scoring-item:hover {
+            border-color: var(--warning);
+        }
+
+        .scoring-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .scoring-content h4 {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .scoring-content p {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+        }
+
+        .scoring-cta {
+            text-align: center;
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .scoring-cta span {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        /* ==================== POWERED BY AI SECTION ==================== */
+        .ai-powered-section {
+            padding: 4rem 0;
+            background: var(--bg-dark);
+        }
+
+        .ai-powered-container {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .ai-powered-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .ai-powered-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .gemini-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #4285f4, #34a853, #fbbc05, #ea4335);
+            padding: 0.5rem 0.875rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .ai-powered-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .ai-powered-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .ai-powered-list li::before {
+            content: '✓';
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .ai-powered-note {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .ai-powered-visual {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .ai-demo-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .ai-demo-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .ai-demo-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .ai-demo-box {
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 0.8125rem;
+        }
+
+        .ai-demo-box.yours {
+            background: rgba(37, 99, 235, 0.15);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+        }
+
+        .ai-demo-box.expert {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .ai-demo-box-label {
+            font-weight: 600;
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .ai-demo-box.yours .ai-demo-box-label { color: var(--primary); }
+        .ai-demo-box.expert .ai-demo-box-label { color: var(--accent); }
+
+        .ai-demo-box p {
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .ai-powered-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .ai-powered-content h2 {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .ai-powered-list li {
+                justify-content: center;
+            }
+        }
+
+        /* ==================== FAQ SECTION ==================== */
+        .faq-section {
+            padding: 4rem 0;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(37, 99, 235, 0.03) 50%, var(--bg-dark) 100%);
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .faq-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary);
+        }
+
+        .faq-question {
+            padding: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-primary);
+            user-select: none;
+        }
+
+        .faq-question:hover {
+            color: var(--primary);
+        }
+
+        .faq-toggle {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+            color: var(--text-muted);
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(45deg);
+            color: var(--primary);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+        }
+
+        .faq-answer-content {
+            padding: 0 1.25rem 1.25rem;
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="landing.html" class="logo">
+                <div class="logo-icon">🧪</div>
+                <span class="logo-text">AI Prompt Lab</span>
+            </a>
+            <nav class="header-nav">
+                <a href="index.html" class="btn btn-primary btn-header">Start Course</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="landing-hero">
+            <div class="hero-gradient-bg"></div>
+            <div class="container">
+                <h1 class="landing-hero-title">Master AI Prompting in 30 Minutes</h1>
+                <p class="landing-hero-tagline">6 hands-on labs. Real business scenarios. No theory.</p>
+
+                <div class="hero-features">
+                    <div class="hero-feature">
+                        <span class="hero-feature-icon">🎯</span>
+                        <span><span class="hero-feature-highlight">6 timed challenges</span> with real-world tasks</span>
+                    </div>
+                    <div class="hero-feature">
+                        <span class="hero-feature-icon">⏱️</span>
+                        <span><span class="hero-feature-highlight">90-150 seconds</span> per lab</span>
+                    </div>
+                    <div class="hero-feature">
+                        <span class="hero-feature-icon">🤖</span>
+                        <span>Actual AI responses, <span class="hero-feature-highlight">not simulations</span></span>
+                    </div>
+                </div>
+
+                <div class="landing-hero-cta">
+                    <a href="index.html" class="btn btn-primary btn-lg btn-pulse">Start Free Training</a>
+                    <a href="#labs" class="landing-secondary-link">See All 6 Labs ↓</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Learn AI Prompting? -->
+        <section class="why-learn-section">
+            <div class="container">
+                <div class="why-learn-header scroll-animate">
+                    <h2>Why Learn AI Prompting?</h2>
+                    <p>AI is transforming how we work. The question is: will you lead or follow?</p>
+                </div>
+
+                <div class="stats-cards">
+                    <div class="stat-card scroll-animate">
+                        <div class="stat-card-icon">📈</div>
+                        <div class="stat-card-value">80%</div>
+                        <div class="stat-card-label">of professionals will use AI tools daily by 2026</div>
+                    </div>
+                    <div class="stat-card scroll-animate" data-delay="100">
+                        <div class="stat-card-icon">⏰</div>
+                        <div class="stat-card-value">2+ hrs</div>
+                        <div class="stat-card-label">saved per day by workers who prompt AI effectively</div>
+                    </div>
+                    <div class="stat-card scroll-animate" data-delay="200">
+                        <div class="stat-card-icon">🎯</div>
+                        <div class="stat-card-value">&lt;10%</div>
+                        <div class="stat-card-label">of AI's capability is used by most people due to weak prompts</div>
+                    </div>
+                    <div class="stat-card scroll-animate" data-delay="300">
+                        <div class="stat-card-icon">💼</div>
+                        <div class="stat-card-value">Top Skill</div>
+                        <div class="stat-card-label">AI prompting ranked among fastest-growing job skills</div>
+                    </div>
+                </div>
+
+                <div class="why-learn-hook scroll-animate">
+                    The difference between <span>frustrating AI</span> and <span>useful AI</span>? <strong>Your prompt.</strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Stats -->
+        <section class="landing-stats-compact">
+            <div class="container">
+                <div class="stats-grid-compact">
+                    <div class="stat-item-compact">
+                        <span class="stat-value-compact">6</span>
+                        <span class="stat-label-compact">Labs</span>
+                    </div>
+                    <div class="stat-item-compact">
+                        <span class="stat-value-compact">3</span>
+                        <span class="stat-label-compact">Skill Tracks</span>
+                    </div>
+                    <div class="stat-item-compact">
+                        <span class="stat-value-compact">~30 min</span>
+                        <span class="stat-label-compact">Total Time</span>
+                    </div>
+                    <div class="stat-item-compact">
+                        <span class="stat-value-compact">Free</span>
+                        <span class="stat-label-compact">No Signup</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works (Compact) -->
+        <section class="landing-how-it-works">
+            <div class="container">
+                <div class="how-it-works-compact">
+                    <div class="how-step-compact scroll-animate">
+                        <div class="how-step-number">1</div>
+                        <div class="how-step-content">
+                            <h3>Read the Scenario</h3>
+                            <p>Real business task, not abstract exercises</p>
+                        </div>
+                    </div>
+
+                    <div class="how-step-compact scroll-animate" data-delay="100">
+                        <div class="how-step-number">2</div>
+                        <div class="how-step-content">
+                            <h3>Write Your Prompt</h3>
+                            <p>Race the clock - focus beats perfection</p>
+                        </div>
+                    </div>
+
+                    <div class="how-step-compact scroll-animate" data-delay="200">
+                        <div class="how-step-number">3</div>
+                        <div class="how-step-content">
+                            <h3>Compare & Learn</h3>
+                            <p>See expert prompts and key takeaways</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The 6 Labs Section -->
+        <section id="labs" class="labs-section">
+            <div class="container">
+                <div class="labs-section-header scroll-animate">
+                    <h2 class="labs-section-title">The 6 Labs</h2>
+                    <p class="labs-section-subtitle">Every challenge uses a real business scenario. Here's exactly what you'll build.</p>
+                </div>
+
+                <!-- Track 1: Text & Content (Easy - Start Here) -->
+                <div class="track-group scroll-animate">
+                    <div class="track-header">
+                        <div class="track-icon text">📝</div>
+                        <div class="track-info">
+                            <h3>Text & Content</h3>
+                            <div class="track-meta">
+                                <span class="track-difficulty easy">● Easy - Start Here</span>
+                                <span>2 Labs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="labs-grid">
+                        <div class="lab-card">
+                            <div class="lab-card-header">
+                                <div class="lab-number text">1</div>
+                                <div class="lab-title-wrap">
+                                    <div class="lab-title">Document Summarization</div>
+                                    <div class="lab-badges">
+                                        <span class="lab-badge lab-badge-track">📝 Text</span>
+                                        <span class="lab-badge lab-badge-difficulty easy">Easy</span>
+                                        <span class="lab-badge lab-badge-time">⏱️ 90s</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="lab-description">A vendor sent you a 2-page service contract. Use AI to extract the key terms, pricing, auto-renewal clauses, and potential red flags before you sign.</p>
+                        </div>
+
+                        <div class="lab-card">
+                            <div class="lab-card-header">
+                                <div class="lab-number text">2</div>
+                                <div class="lab-title-wrap">
+                                    <div class="lab-title">Contextual Email Response</div>
+                                    <div class="lab-badges">
+                                        <span class="lab-badge lab-badge-track">📝 Text</span>
+                                        <span class="lab-badge lab-badge-difficulty medium">Medium</span>
+                                        <span class="lab-badge lab-badge-time">⏱️ 120s</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="lab-description">A frustrated client sent escalating emails about a project delay. Craft an AI prompt that generates a professional response that de-escalates and saves the relationship.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Track 2: Finance & Data (Medium) -->
+                <div class="track-group scroll-animate">
+                    <div class="track-header">
+                        <div class="track-icon finance">📊</div>
+                        <div class="track-info">
+                            <h3>Finance & Data</h3>
+                            <div class="track-meta">
+                                <span class="track-difficulty medium">● Medium</span>
+                                <span>2 Labs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="labs-grid">
+                        <div class="lab-card">
+                            <div class="lab-card-header">
+                                <div class="lab-number finance">3</div>
+                                <div class="lab-title-wrap">
+                                    <div class="lab-title">Generate a Business Quote</div>
+                                    <div class="lab-badges">
+                                        <span class="lab-badge lab-badge-track">📊 Finance</span>
+                                        <span class="lab-badge lab-badge-difficulty easy">Easy</span>
+                                        <span class="lab-badge lab-badge-time">⏱️ 90s</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="lab-description">Transform rough project notes (equipment costs, labor, materials) into a professional, itemized business quote for a medical facility HVAC replacement.</p>
+                        </div>
+
+                        <div class="lab-card">
+                            <div class="lab-card-header">
+                                <div class="lab-number finance">4</div>
+                                <div class="lab-title-wrap">
+                                    <div class="lab-title">Data Analysis & Visualization</div>
+                                    <div class="lab-badges">
+                                        <span class="lab-badge lab-badge-track">📊 Finance</span>
+                                        <span class="lab-badge lab-badge-difficulty medium">Medium</span>
+                                        <span class="lab-badge lab-badge-time">⏱️ 150s</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="lab-description">The CEO needs board meeting insights from regional sales data. Analyze spreadsheet data to find top performers, seasonal patterns, and strategic recommendations.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Track 3: Marketing & Media (Hard - Most Advanced) -->
+                <div class="track-group scroll-animate">
+                    <div class="track-header">
+                        <div class="track-icon marketing">🎨</div>
+                        <div class="track-info">
+                            <h3>Marketing & Media</h3>
+                            <div class="track-meta">
+                                <span class="track-difficulty hard">● Hard - Most Advanced</span>
+                                <span>2 Labs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="labs-grid">
+                        <div class="lab-card">
+                            <div class="lab-card-header">
+                                <div class="lab-number marketing">5</div>
+                                <div class="lab-title-wrap">
+                                    <div class="lab-title">Product Photo Enhancement</div>
+                                    <div class="lab-badges">
+                                        <span class="lab-badge lab-badge-track">🎨 Marketing</span>
+                                        <span class="lab-badge lab-badge-difficulty medium">Medium</span>
+                                        <span class="lab-badge lab-badge-time">⏱️ 90s</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="lab-description">Your company needs professional van photos for the website. Transform a basic iPhone parking lot photo into a clean, studio-quality product shot with white background.</p>
+                        </div>
+
+                        <div class="lab-card">
+                            <div class="lab-card-header">
+                                <div class="lab-number marketing">6</div>
+                                <div class="lab-title-wrap">
+                                    <div class="lab-title">Social Media Infographic</div>
+                                    <div class="lab-badges">
+                                        <span class="lab-badge lab-badge-track">🎨 Marketing</span>
+                                        <span class="lab-badge lab-badge-difficulty hard">Hard</span>
+                                        <span class="lab-badge lab-badge-time">⏱️ 120s</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="lab-description">Turn your professional van photo into a vibrant summer promotional graphic with beach theme, discount messaging, and eye-catching design for social media.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- What You'll Actually Learn -->
+        <section class="skills-section">
+            <div class="container">
+                <div class="skills-header scroll-animate">
+                    <h2>What You'll Actually Learn</h2>
+                    <p>Concrete skills you can use immediately after each lab</p>
+                </div>
+
+                <div class="skills-grid">
+                    <div class="skill-card scroll-animate">
+                        <div class="skill-icon">🎯</div>
+                        <div class="skill-name">Specificity</div>
+                        <div class="skill-desc">Tell AI exactly what you want - no more vague requests</div>
+                    </div>
+                    <div class="skill-card scroll-animate" data-delay="100">
+                        <div class="skill-icon">📋</div>
+                        <div class="skill-name">Structure</div>
+                        <div class="skill-desc">Format prompts for cleaner, more useful outputs</div>
+                    </div>
+                    <div class="skill-card scroll-animate" data-delay="200">
+                        <div class="skill-icon">🎭</div>
+                        <div class="skill-name">Context</div>
+                        <div class="skill-desc">Give AI the background it needs to help you</div>
+                    </div>
+                    <div class="skill-card scroll-animate">
+                        <div class="skill-icon">⚡</div>
+                        <div class="skill-name">Efficiency</div>
+                        <div class="skill-desc">Get it right the first time, not the fifth</div>
+                    </div>
+                    <div class="skill-card scroll-animate" data-delay="100">
+                        <div class="skill-icon">🔄</div>
+                        <div class="skill-name">Iteration</div>
+                        <div class="skill-desc">Improve prompts based on what AI returns</div>
+                    </div>
+                    <div class="skill-card scroll-animate" data-delay="200">
+                        <div class="skill-icon">📊</div>
+                        <div class="skill-name">Output Control</div>
+                        <div class="skill-desc">Specify format, length, tone, and style</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- See the Difference - Prompt Comparison -->
+        <section class="comparison-section">
+            <div class="container">
+                <div class="comparison-header scroll-animate">
+                    <h2>See the Difference</h2>
+                    <p>A taste of what expert prompting looks like (from Lab 1)</p>
+                </div>
+
+                <div class="comparison-container scroll-animate">
+                    <div class="comparison-card weak">
+                        <div class="comparison-card-header">
+                            <span>❌</span> Weak Prompt
+                        </div>
+                        <div class="comparison-card-body">
+                            <div class="prompt-text">Summarize this contract.</div>
+                        </div>
+                    </div>
+
+                    <div class="comparison-card expert">
+                        <div class="comparison-card-header">
+                            <span>✅</span> Expert Prompt
+                        </div>
+                        <div class="comparison-card-body">
+                            <div class="prompt-text">Summarize this service contract for a non-legal business owner.
+
+Include:
+• Key services and deliverables
+• Payment terms and pricing
+• Contract duration and renewal terms
+• Termination conditions
+• Any red flags or unusual clauses
+
+Format as bullet points, max 200 words.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comparison-insights scroll-animate">
+                    <h4>What makes the expert prompt better?</h4>
+                    <div class="insights-list">
+                        <div class="insight-item">
+                            <span class="insight-icon">✓</span>
+                            <span>Defines the audience (non-legal owner)</span>
+                        </div>
+                        <div class="insight-item">
+                            <span class="insight-icon">✓</span>
+                            <span>Lists specific information to extract</span>
+                        </div>
+                        <div class="insight-item">
+                            <span class="insight-icon">✓</span>
+                            <span>Asks for red flags proactively</span>
+                        </div>
+                        <div class="insight-item">
+                            <span class="insight-icon">✓</span>
+                            <span>Specifies output format (bullets)</span>
+                        </div>
+                        <div class="insight-item">
+                            <span class="insight-icon">✓</span>
+                            <span>Sets a word limit (200 words)</span>
+                        </div>
+                        <div class="insight-item">
+                            <span class="insight-icon">✓</span>
+                            <span>Clear structure with line breaks</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marketing Preview (with actual images) -->
+        <section class="marketing-preview">
+            <div class="container">
+                <div class="preview-header scroll-animate">
+                    <h2>See The Transformation</h2>
+                    <p>Labs 5 & 6: From iPhone photo to marketing campaign</p>
+                </div>
+
+                <div class="transformation-cards scroll-animate">
+                    <div class="transformation-card">
+                        <div class="transformation-badge">1</div>
+                        <div class="transformation-image-wrapper">
+                            <img src="images/before-van.webp" alt="Original iPhone photo of service van in parking lot" class="transformation-image" loading="lazy">
+                        </div>
+                        <div class="transformation-caption">Your iPhone photo</div>
+                    </div>
+
+                    <div class="transformation-arrow">→</div>
+
+                    <div class="transformation-card">
+                        <div class="transformation-badge">2</div>
+                        <div class="transformation-image-wrapper">
+                            <img src="images/after-van.webp" alt="AI-enhanced professional product shot with white background" class="transformation-image" loading="lazy">
+                        </div>
+                        <div class="transformation-caption">Professional product shot</div>
+                    </div>
+
+                    <div class="transformation-arrow">→</div>
+
+                    <div class="transformation-card">
+                        <div class="transformation-badge">3</div>
+                        <div class="transformation-image-wrapper">
+                            <img src="images/Infographic.webp" alt="Summer promotional social media infographic" class="transformation-image" loading="lazy">
+                        </div>
+                        <div class="transformation-caption">Social media campaign</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Your 30-Minute Journey -->
+        <section class="journey-section">
+            <div class="container">
+                <div class="journey-header scroll-animate">
+                    <h2>Your 30-Minute Journey</h2>
+                    <p>Progress from beginner to confident in three focused phases</p>
+                </div>
+
+                <div class="journey-timeline">
+                    <div class="journey-step easy scroll-animate">
+                        <div class="journey-time">Minutes 0-10</div>
+                        <div class="journey-title">
+                            📝 Text & Content
+                            <span class="journey-difficulty">Easy</span>
+                        </div>
+                        <div class="journey-desc">Master the basics with document summarization and email writing. Build your foundation with clear, structured prompts.</div>
+                    </div>
+
+                    <div class="journey-connector scroll-animate">→</div>
+
+                    <div class="journey-step medium scroll-animate" data-delay="100">
+                        <div class="journey-time">Minutes 10-20</div>
+                        <div class="journey-title">
+                            📊 Finance & Data
+                            <span class="journey-difficulty">Medium</span>
+                        </div>
+                        <div class="journey-desc">Level up with business documents and data analysis. Learn to extract insights and generate professional outputs.</div>
+                    </div>
+
+                    <div class="journey-connector scroll-animate">→</div>
+
+                    <div class="journey-step hard scroll-animate" data-delay="200">
+                        <div class="journey-time">Minutes 20-30</div>
+                        <div class="journey-title">
+                            🎨 Marketing & Media
+                            <span class="journey-difficulty">Hard</span>
+                        </div>
+                        <div class="journey-desc">Advanced image transformation challenges. Turn photos into professional marketing materials with AI.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Who Is This For? -->
+        <section class="personas-section">
+            <div class="container">
+                <div class="personas-header scroll-animate">
+                    <h2>Who Is This For?</h2>
+                    <p>If any of these sound like you, you're in the right place</p>
+                </div>
+
+                <div class="personas-grid">
+                    <div class="persona-card scroll-animate">
+                        <div class="persona-icon">👔</div>
+                        <div class="persona-title">Business Professionals</div>
+                        <div class="persona-desc">"You use ChatGPT but feel like you're not getting its full potential. Your prompts work... but you know they could be better."</div>
+                    </div>
+
+                    <div class="persona-card scroll-animate" data-delay="100">
+                        <div class="persona-icon">🔧</div>
+                        <div class="persona-title">Tradespeople & Contractors</div>
+                        <div class="persona-desc">"You want AI to help with quotes, emails, and marketing but don't know where to start. You're practical - you learn by doing."</div>
+                    </div>
+
+                    <div class="persona-card scroll-animate" data-delay="200">
+                        <div class="persona-icon">🎓</div>
+                        <div class="persona-title">Anyone Curious</div>
+                        <div class="persona-desc">"You've heard AI can save hours of work and want to learn the right way - not through trial and error."</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How Scoring Works -->
+        <section class="scoring-section">
+            <div class="container">
+                <div class="scoring-header scroll-animate">
+                    <h2>How Scoring Works</h2>
+                    <p>Gamified learning that rewards good prompting habits</p>
+                </div>
+
+                <div class="scoring-grid">
+                    <div class="scoring-item scroll-animate">
+                        <div class="scoring-icon">🏆</div>
+                        <div class="scoring-content">
+                            <h4>Base Points</h4>
+                            <p>Earn points for completing each lab - even imperfect prompts count</p>
+                        </div>
+                    </div>
+
+                    <div class="scoring-item scroll-animate" data-delay="100">
+                        <div class="scoring-icon">🎯</div>
+                        <div class="scoring-content">
+                            <h4>Keyword Bonus</h4>
+                            <p>Extra points when your prompt includes key elements the experts use</p>
+                        </div>
+                    </div>
+
+                    <div class="scoring-item scroll-animate" data-delay="200">
+                        <div class="scoring-icon">⚡</div>
+                        <div class="scoring-content">
+                            <h4>Speed Bonus</h4>
+                            <p>Finish under the time limit for bonus points - efficiency matters</p>
+                        </div>
+                    </div>
+
+                    <div class="scoring-item scroll-animate">
+                        <div class="scoring-icon">💡</div>
+                        <div class="scoring-content">
+                            <h4>Hint Penalty</h4>
+                            <p>Using hints costs points - but they're there when you need them</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scoring-cta scroll-animate">
+                    <span>Compete with yourself</span> to improve your score on each attempt
+                </div>
+            </div>
+        </section>
+
+        <!-- Powered by Real AI -->
+        <section class="ai-powered-section">
+            <div class="container">
+                <div class="ai-powered-container">
+                    <div class="ai-powered-content scroll-animate">
+                        <h2>
+                            Powered by Real AI
+                            <span class="gemini-badge">✨ Gemini</span>
+                        </h2>
+
+                        <ul class="ai-powered-list">
+                            <li>Add your free Gemini API key to see real AI-generated results</li>
+                            <li>Compare YOUR output against the expert's output side-by-side</li>
+                            <li>Works with both text generation and image transformation</li>
+                            <li>API key stored locally - never sent to any server except Google</li>
+                        </ul>
+
+                        <div class="ai-powered-note">
+                            <strong>No API key?</strong> No problem. You can complete all labs without one - you'll just see the expert's pre-generated results instead of live AI responses.
+                        </div>
+                    </div>
+
+                    <div class="ai-powered-visual scroll-animate" data-delay="100">
+                        <div class="ai-demo-card">
+                            <div class="ai-demo-header">
+                                <span>📊</span> Results Comparison Preview
+                            </div>
+                            <div class="ai-demo-comparison">
+                                <div class="ai-demo-box yours">
+                                    <div class="ai-demo-box-label">Your Result</div>
+                                    <p>See what AI generates from your prompt in real-time...</p>
+                                </div>
+                                <div class="ai-demo-box expert">
+                                    <div class="ai-demo-box-label">Expert Result</div>
+                                    <p>Compare against what the expert prompt produces...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <div class="container">
+                <div class="faq-header scroll-animate">
+                    <h2>Frequently Asked Questions</h2>
+                    <p>Everything you need to know before starting</p>
+                </div>
+
+                <div class="faq-list">
+                    <div class="faq-item scroll-animate">
+                        <div class="faq-question">
+                            <span>Do I need an API key?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                No, but you can add one to see real AI-generated results from your prompts. Without a key, you'll still learn effectively using the expert's pre-generated responses.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item scroll-animate" data-delay="100">
+                        <div class="faq-question">
+                            <span>Is this really free?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Yes, completely free. No account needed, no credit card, no catch. The entire course runs in your browser with no signup required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item scroll-animate" data-delay="200">
+                        <div class="faq-question">
+                            <span>How long does it take?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                About 30 minutes for all 6 labs. But you can do them one at a time - your progress is saved locally in your browser.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item scroll-animate">
+                        <div class="faq-question">
+                            <span>What AI does this use?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Google Gemini for both text and image generation. It's one of the most capable AI models available and the API offers a generous free tier.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item scroll-animate" data-delay="100">
+                        <div class="faq-question">
+                            <span>Will my API key be safe?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Yes. Your API key is stored only in your browser's local storage and sent directly to Google's API. It never touches our servers.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item scroll-animate" data-delay="200">
+                        <div class="faq-question">
+                            <span>Can I retake labs to improve my score?</span>
+                            <span class="faq-toggle">+</span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-content">
+                                Absolutely! Each lab can be retaken as many times as you want. Challenge yourself to beat your previous score.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section class="landing-section landing-final-cta">
+            <div class="container">
+                <h2 class="landing-cta-title scroll-animate">Ready to Start?</h2>
+                <p class="landing-cta-subtitle scroll-animate">Free. No signup. Works on any device.</p>
+                <a href="index.html" class="btn btn-accent btn-lg btn-pulse scroll-animate">Begin Lab 1</a>
+
+                <div class="partner-section scroll-animate">
+                    <span class="partner-label">Powered by</span>
+                    <a href="https://kteanalytics.com/workshops-training/" target="_blank" rel="noopener" class="partner-link">KTE Analytics</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">
+                Powered by <a href="https://kteanalytics.com/workshops-training/" target="_blank" rel="noopener">KTE Analytics</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== LANDING PAGE JAVASCRIPT ====================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setupScrollAnimations();
+            setupSmoothScroll();
+            setupFaqAccordion();
+        });
+
+        function setupFaqAccordion() {
+            var faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(function(item) {
+                var question = item.querySelector('.faq-question');
+
+                question.addEventListener('click', function() {
+                    // Close other open items
+                    faqItems.forEach(function(otherItem) {
+                        if (otherItem !== item && otherItem.classList.contains('active')) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+
+                    // Toggle current item
+                    item.classList.toggle('active');
+                });
+            });
+        }
+
+        function setupScrollAnimations() {
+            var animatedElements = document.querySelectorAll('.scroll-animate');
+
+            if (animatedElements.length === 0) return;
+
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            animatedElements.forEach(function(el) {
+                observer.observe(el);
+            });
+        }
+
+        function setupSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        var headerOffset = 80;
+                        var elementPosition = target.getBoundingClientRect().top;
+                        var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

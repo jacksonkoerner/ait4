@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Lab | KTE Analytics</title>
+    <meta name="description" content="Learn to prompt AI through hands-on, timed challenges. Master image generation, text prompts, and automation workflows.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="landing.html" class="logo">
+                <div class="logo-icon">🧪</div>
+                <span class="logo-text">AI Prompt Lab</span>
+            </a>
+            <nav class="header-nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="settings.html" class="settings-btn" title="Settings">
+                    ⚙️
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>AI Prompt Lab</h1>
+                <p class="tagline">Stop Overthinking. Start Prompting.</p>
+                <p class="subtitle">Learn to prompt AI through hands-on, timed challenges. Compare your prompts to expert examples and master the art of AI communication.</p>
+            </div>
+        </section>
+
+        <!-- Tracks Section -->
+        <section class="tracks-section">
+            <div class="container">
+                <h2>Choose Your Track</h2>
+                <div class="tracks-grid" id="tracks-grid">
+                    <!-- Track cards will be inserted by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="tracks-section">
+            <div class="container">
+                <h2>How It Works</h2>
+                <div class="tracks-grid">
+                    <div class="track-card" style="cursor: default;">
+                        <div class="track-header">
+                            <div class="track-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">1</div>
+                        </div>
+                        <h3 class="track-title">Read the Challenge</h3>
+                        <p class="track-description">Each lab presents a real business scenario where AI can help. Understand the context and what output you need.</p>
+                    </div>
+                    <div class="track-card" style="cursor: default;">
+                        <div class="track-header">
+                            <div class="track-icon" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">2</div>
+                        </div>
+                        <h3 class="track-title">Write Your Prompt</h3>
+                        <p class="track-description">Race against the clock to write the best prompt you can. Focus on being specific, clear, and complete.</p>
+                    </div>
+                    <div class="track-card" style="cursor: default;">
+                        <div class="track-header">
+                            <div class="track-icon" style="background: linear-gradient(135deg, #10b981, #14b8a6);">3</div>
+                        </div>
+                        <h3 class="track-title">Learn from Experts</h3>
+                        <p class="track-description">Compare your prompt to the expert version. See what keywords and techniques make prompts more effective.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">
+                Powered by <a href="https://kteanalytics.com/workshops-training/" target="_blank" rel="noopener">KTE Analytics</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/labs.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

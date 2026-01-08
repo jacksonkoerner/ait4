@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | AI Prompt Lab</title>
+    <meta name="description" content="Configure API keys for AI Prompt Lab to enable live prompt testing.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🧪</div>
+                <span class="logo-text">AI Prompt Lab</span>
+            </a>
+            <nav class="header-nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="settings.html" class="settings-btn active" title="Settings">
+                    ⚙️
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="settings-container">
+        <div class="container">
+            <!-- Header -->
+            <div class="settings-header">
+                <h1>⚙️ Settings</h1>
+                <p>Configure your Gemini API key to enable image and text generation. Your key is stored locally in your browser and never sent to our servers.</p>
+            </div>
+
+            <!-- Google Gemini -->
+            <div class="api-card">
+                <div class="api-card-header">
+                    <div class="api-info">
+                        <div class="api-icon">💎</div>
+                        <div>
+                            <div class="api-name">Google Gemini</div>
+                            <div class="api-description">Powers both image and text generation</div>
+                        </div>
+                    </div>
+                    <div class="api-status" id="gemini-status">
+                        <span class="status-dot not-configured"></span>
+                        <span class="status-text">Not configured</span>
+                    </div>
+                </div>
+                <div class="api-form">
+                    <input
+                        type="password"
+                        id="gemini-key"
+                        class="api-input"
+                        placeholder="Enter your Gemini API key"
+                    >
+                    <div class="api-actions">
+                        <button class="btn btn-secondary" onclick="handleSaveApiKey('gemini')">Save</button>
+                        <button class="btn btn-outline" id="gemini-test" onclick="handleTestApi('gemini')">Test</button>
+                    </div>
+                </div>
+                <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" class="api-link">
+                    🔗 Get your API key at aistudio.google.com
+                </a>
+            </div>
+
+            <!-- Info Box -->
+            <div class="api-card" style="background: rgba(37, 99, 235, 0.1); border-color: var(--primary);">
+                <h3 style="margin-bottom: 1rem;">💡 How It Works</h3>
+                <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
+                    <li style="margin-bottom: 0.5rem;"><strong>Privacy First:</strong> Your API key is stored only in your browser's localStorage. It never leaves your device.</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Image Labs:</strong> Your prompt + the before image are sent to Gemini to generate a transformed image</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Text Labs:</strong> Generate AI responses using the expert prompts</li>
+                    <li style="margin-bottom: 0.5rem;"><strong>Optional:</strong> Labs work without an API key - you just can't generate live results</li>
+                </ul>
+            </div>
+
+            <!-- What You'll See -->
+            <div class="api-card">
+                <h3 style="margin-bottom: 1rem;">🎯 What Happens in Image Labs</h3>
+                <div style="color: var(--text-secondary);">
+                    <p style="margin-bottom: 1rem;">When you complete an image lab with a Gemini API key configured:</p>
+                    <ol style="padding-left: 1.5rem;">
+                        <li style="margin-bottom: 0.5rem;"><strong>Your Result:</strong> We send your prompt + the original image to Gemini and show the generated result</li>
+                        <li style="margin-bottom: 0.5rem;"><strong>Expert Result:</strong> We also send the expert prompt + original image to show you what the ideal result looks like</li>
+                        <li style="margin-bottom: 0.5rem;"><strong>Compare:</strong> Use the sliders to compare both results against the original image</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="api-card" style="border-color: var(--danger);">
+                <h3 style="margin-bottom: 1rem; color: var(--danger);">⚠️ Danger Zone</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    Reset all progress and clear stored API keys. This action cannot be undone.
+                </p>
+                <button class="btn btn-outline" style="border-color: var(--danger); color: var(--danger);" onclick="handleResetAll()">
+                    🗑️ Reset All Data
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">
+                Powered by <a href="https://kteanalytics.com/workshops-training/" target="_blank" rel="noopener">KTE Analytics</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/labs.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        function handleResetAll() {
+            if (confirm('Are you sure you want to reset all data? This will clear your progress and API keys.')) {
+                localStorage.clear();
+                showToast('All data has been reset', 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            }
+        }
+    </script>
+</body>
+</html>
