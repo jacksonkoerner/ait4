@@ -638,69 +638,120 @@
         var SETUP_COMPLETE_KEY = 'aipromptlab_setup_complete';
         var GEMINI_KEY = 'aipromptlab_gemini_key';
 
+        // ==================== STORAGE HELPERS ====================
+        function safeGetItem(key) {
+            try {
+                return localStorage.getItem(key);
+            } catch (e) {
+                console.error('localStorage error:', e);
+                return null;
+            }
+        }
+
+        function safeSetItem(key, value) {
+            try {
+                localStorage.setItem(key, value);
+                return true;
+            } catch (e) {
+                console.error('localStorage error:', e);
+                return false;
+            }
+        }
+
+        function safeRemoveItem(key) {
+            try {
+                localStorage.removeItem(key);
+                return true;
+            } catch (e) {
+                console.error('localStorage error:', e);
+                return false;
+            }
+        }
+
         // ==================== INITIALIZATION ====================
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Setup page loaded');
+            // Always set up event listeners first, regardless of other errors
+            setupEventListeners();
+            // Then initialize the page state
             initSetupPage();
         });
 
         function initSetupPage() {
             console.log('Initializing setup page...');
 
-            // Check existing state
-            var existingKey = localStorage.getItem(GEMINI_KEY);
-            var setupComplete = localStorage.getItem(SETUP_COMPLETE_KEY) === 'true';
+            try {
+                // Check existing state
+                var existingKey = safeGetItem(GEMINI_KEY);
+                var setupComplete = safeGetItem(SETUP_COMPLETE_KEY) === 'true';
 
-            console.log('Existing key:', existingKey ? 'Yes' : 'No');
-            console.log('Setup complete:', setupComplete);
+                console.log('Existing key:', existingKey ? 'Yes' : 'No');
+                console.log('Setup complete:', setupComplete);
 
-            if (setupComplete && existingKey) {
-                showAlreadySetup();
-            } else if (existingKey) {
-                document.getElementById('api-key-input').value = existingKey;
+                if (setupComplete && existingKey) {
+                    showAlreadySetup();
+                } else if (existingKey) {
+                    var input = document.getElementById('api-key-input');
+                    if (input) {
+                        input.value = existingKey;
+                    }
+                }
+            } catch (e) {
+                console.error('Error initializing setup page:', e);
             }
-
-            // Set up all event listeners
-            setupEventListeners();
         }
 
         function setupEventListeners() {
+            console.log('Setting up event listeners...');
+
             // Verify button
             var verifyBtn = document.getElementById('verify-btn');
             if (verifyBtn) {
-                verifyBtn.onclick = function() {
+                verifyBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
                     console.log('Verify button clicked');
                     verifyAndContinue();
-                };
+                });
+                console.log('Verify button listener attached');
+            } else {
+                console.error('Verify button not found');
             }
 
             // Enter key on input
             var inputField = document.getElementById('api-key-input');
             if (inputField) {
-                inputField.onkeypress = function(e) {
+                inputField.addEventListener('keypress', function(e) {
                     if (e.key === 'Enter') {
+                        e.preventDefault();
                         console.log('Enter key pressed');
                         verifyAndContinue();
                     }
-                };
+                });
+                console.log('Input field listener attached');
             }
 
             // Expandable header
             var expandableHeader = document.getElementById('expandable-header');
             if (expandableHeader) {
-                expandableHeader.onclick = function() {
+                expandableHeader.addEventListener('click', function(e) {
+                    e.preventDefault();
                     console.log('Expandable header clicked');
                     toggleInstructions();
-                };
+                });
+                console.log('Expandable header listener attached');
+            } else {
+                console.error('Expandable header not found');
             }
 
             // Change key button
             var changeKeyBtn = document.getElementById('change-key-btn');
             if (changeKeyBtn) {
-                changeKeyBtn.onclick = function() {
+                changeKeyBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
                     console.log('Change key button clicked');
                     showChangeKeyForm();
-                };
+                });
+                console.log('Change key button listener attached');
             }
         }
 
@@ -725,7 +776,7 @@
                 'Your previous key will be replaced with the new one after verification.';
 
             // Pre-fill existing key
-            var existingKey = localStorage.getItem(GEMINI_KEY);
+            var existingKey = safeGetItem(GEMINI_KEY);
             if (existingKey) {
                 document.getElementById('api-key-input').value = existingKey;
             }
@@ -738,15 +789,23 @@
 
         // ==================== VERIFICATION ====================
         function verifyAndContinue() {
+            console.log('verifyAndContinue called');
+
             var input = document.getElementById('api-key-input');
             var verifyBtn = document.getElementById('verify-btn');
             var successStatus = document.getElementById('success-status');
             var errorStatus = document.getElementById('error-status');
             var errorMessage = document.getElementById('error-message');
 
+            if (!input || !verifyBtn || !successStatus || !errorStatus || !errorMessage) {
+                console.error('Required elements not found');
+                alert('Page error - please refresh and try again.');
+                return;
+            }
+
             var apiKey = input.value.trim();
 
-            console.log('Verifying API key...');
+            console.log('Verifying API key... Key length:', apiKey.length);
 
             // Reset status
             successStatus.classList.remove('visible');
@@ -765,17 +824,17 @@
             verifyBtn.innerHTML = '<span class="spinner"></span> Verifying...';
 
             // Test the API key
-            fetch('https://generativelanguage.googleapis.com/v1beta/models?key=' + apiKey, {
+            fetch('https://generativelanguage.googleapis.com/v1beta/models?key=' + encodeURIComponent(apiKey), {
                 method: 'GET'
             })
             .then(function(response) {
                 console.log('API response status:', response.status);
 
-                if (response.status === 400 || response.status === 401) {
-                    throw new Error('Invalid API key');
+                if (response.status === 400 || response.status === 401 || response.status === 403) {
+                    throw new Error('Invalid API key. Please check and try again.');
                 }
                 if (!response.ok) {
-                    throw new Error('Unable to verify API key');
+                    throw new Error('Unable to verify API key (status: ' + response.status + ')');
                 }
                 return response.json();
             })
@@ -783,17 +842,21 @@
                 console.log('API key verified successfully');
 
                 // Save the key
-                localStorage.setItem(GEMINI_KEY, apiKey);
-                localStorage.setItem(SETUP_COMPLETE_KEY, 'true');
+                safeSetItem(GEMINI_KEY, apiKey);
+                safeSetItem(SETUP_COMPLETE_KEY, 'true');
 
                 // Show success state
                 successStatus.classList.add('visible');
                 verifyBtn.innerHTML = 'Start the Course →';
                 verifyBtn.className = 'btn btn-accent verify-btn';
                 verifyBtn.disabled = false;
-                verifyBtn.onclick = function() {
+
+                // Remove old listener and add new one
+                var newBtn = verifyBtn.cloneNode(true);
+                verifyBtn.parentNode.replaceChild(newBtn, verifyBtn);
+                newBtn.addEventListener('click', function() {
                     window.location.href = 'index.html';
-                };
+                });
 
                 // Auto-redirect after 1 second
                 setTimeout(function() {
@@ -808,7 +871,7 @@
                 errorStatus.classList.add('visible');
 
                 // Don't save invalid key
-                localStorage.removeItem(GEMINI_KEY);
+                safeRemoveItem(GEMINI_KEY);
 
                 // Reset button
                 verifyBtn.disabled = false;
