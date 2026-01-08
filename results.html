@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Complete | AI Prompt Lab</title>
+    <meta name="description" content="View your AI Prompt Lab course results and personalized diagnostic.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🧪</div>
+                <span class="logo-text">AI Prompt Lab</span>
+            </a>
+            <nav class="header-nav">
+                <a href="landing.html" class="nav-link">Home</a>
+                <a href="settings.html" class="settings-btn" title="Settings">⚙️</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="results-page-container">
+        <div class="container">
+
+            <!-- Celebration Header -->
+            <div class="results-header">
+                <div class="celebration-icon">🎓</div>
+                <h1>Course Complete!</h1>
+                <p class="results-subtitle">You've finished all 6 labs. Here's how you did.</p>
+            </div>
+
+            <!-- Overall Score Card -->
+            <div class="overall-score-card">
+                <div class="overall-score-circle">
+                    <svg viewBox="0 0 100 100" class="score-ring">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="var(--bg-card)" stroke-width="8"/>
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="url(#scoreGradient)" stroke-width="8"
+                                stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="283"
+                                class="score-ring-fill" id="score-ring-fill"/>
+                        <defs>
+                            <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="var(--primary)"/>
+                                <stop offset="100%" stop-color="var(--accent)"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div class="score-center">
+                        <span class="overall-score-value" id="overall-score">0</span>
+                        <span class="overall-score-max">/100</span>
+                    </div>
+                </div>
+                <div class="overall-grade" id="overall-grade">
+                    <span class="grade-label-large">Calculating...</span>
+                    <span class="grade-stars-large">☆☆☆☆☆</span>
+                </div>
+            </div>
+
+            <!-- Scores by Track -->
+            <div class="results-section">
+                <h2 class="results-section-title">Scores by Track</h2>
+                <div class="track-results-grid" id="track-results">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Skill Breakdown -->
+            <div class="results-section">
+                <h2 class="results-section-title">Skill Breakdown</h2>
+                <div class="skills-grid">
+                    <div class="skill-breakdown-card">
+                        <h3>AI Evaluation Dimensions</h3>
+                        <div class="skill-bars" id="skill-bars">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                    </div>
+                    <div class="skill-breakdown-card">
+                        <h3>Techniques Used</h3>
+                        <div class="technique-usage" id="technique-usage">
+                            <!-- Filled by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Diagnostic -->
+            <div class="results-section">
+                <h2 class="results-section-title">🤖 Your Personalized Assessment</h2>
+                <div class="diagnostic-card" id="diagnostic-card">
+                    <div class="diagnostic-loading" id="diagnostic-loading">
+                        <span class="spinner"></span>
+                        <span>Generating your personalized assessment...</span>
+                    </div>
+                    <div class="diagnostic-content" id="diagnostic-content">
+                        <!-- Filled by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="results-actions">
+                <button class="btn btn-primary btn-lg" id="share-btn" onclick="openShareModal()">
+                    📤 Share Your Results
+                </button>
+                <button class="btn btn-secondary" onclick="retakeCourse()">
+                    🔄 Retake Course
+                </button>
+                <a href="landing.html" class="btn btn-outline">
+                    🏠 Back to Home
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Share Modal -->
+    <div class="modal-overlay" id="share-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Share Your Results</h3>
+                <button class="modal-close" onclick="closeShareModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <canvas id="share-canvas" width="1200" height="630"></canvas>
+                <div class="share-actions">
+                    <button class="btn btn-primary" onclick="downloadShareImage()">
+                        📥 Download Image
+                    </button>
+                    <button class="btn btn-secondary" onclick="copyShareText()">
+                        📋 Copy as Text
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/labs.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/results.js"></script>
+</body>
+</html>
