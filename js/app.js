@@ -853,22 +853,96 @@ async function generateTextOutputs(userPrompt) {
  * Display the results
  */
 function displayResults(userPrompt, scoreData) {
-    // Score
+    // Overall Score
     const scoreValueEl = document.getElementById('score-value');
-    if (scoreValueEl) scoreValueEl.textContent = scoreData.total;
+    if (scoreValueEl) scoreValueEl.textContent = scoreData.finalScore;
 
-    // Score breakdown
-    const baseScoreEl = document.getElementById('base-score');
-    const keywordScoreEl = document.getElementById('keyword-score');
-    const timeBonusEl = document.getElementById('time-bonus');
-    const hintPenaltyEl = document.getElementById('hint-penalty');
+    // Grade Label & Stars
+    const grade = getGradeLabel(scoreData.finalScore);
+    const gradeEl = document.getElementById('score-grade');
+    if (gradeEl) {
+        gradeEl.innerHTML = `
+            <span class="grade-label" style="color: ${grade.color}">${grade.label}</span>
+            <span class="grade-stars">${renderStars(grade.stars)}</span>
+        `;
+    }
 
-    if (baseScoreEl) baseScoreEl.textContent = '+' + scoreData.base;
-    if (keywordScoreEl) keywordScoreEl.textContent = '+' + scoreData.keywords;
-    if (timeBonusEl) timeBonusEl.textContent = '+' + scoreData.timeBonus;
-    if (hintPenaltyEl) {
-        hintPenaltyEl.textContent = scoreData.hintPenalty;
-        hintPenaltyEl.parentElement.style.display = scoreData.hintPenalty ? 'block' : 'none';
+    // Technique Score
+    const techniqueScoreEl = document.getElementById('technique-score');
+    if (techniqueScoreEl) techniqueScoreEl.textContent = `${scoreData.techniqueScore}/50`;
+
+    // Technique Checklist
+    const techniqueChecklist = document.getElementById('technique-checklist');
+    if (techniqueChecklist) {
+        const techniqueLabels = {
+            outputFormat: { name: 'Output Format', points: 8 },
+            lengthConstraint: { name: 'Length Constraint', points: 7 },
+            audienceDefined: { name: 'Audience Defined', points: 7 },
+            toneSpecified: { name: 'Tone Specified', points: 7 },
+            negativeConstraints: { name: 'Negative Constraints', points: 7 },
+            multipleRequirements: { name: 'Multiple Requirements', points: 7 },
+            contextProvided: { name: 'Context Provided', points: 7 }
+        };
+
+        techniqueChecklist.innerHTML = Object.entries(techniqueLabels).map(([key, info]) => {
+            const detected = scoreData.techniques[key];
+            return `
+                <div class="technique-item ${detected ? 'detected' : 'missed'}">
+                    <span class="technique-check">${detected ? '✓' : '○'}</span>
+                    <span class="technique-name">${info.name}</span>
+                    <span class="technique-points">${detected ? '+' + info.points : '0'}pts</span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // AI Score
+    const aiScoreEl = document.getElementById('ai-score');
+    if (aiScoreEl) aiScoreEl.textContent = `${scoreData.aiScore}/50`;
+
+    // AI Dimensions
+    const aiDimensions = document.getElementById('ai-dimensions');
+    if (aiDimensions && scoreData.aiEvaluation) {
+        const dimensions = [
+            { key: 'specificity', label: 'Specificity' },
+            { key: 'completeness', label: 'Completeness' },
+            { key: 'structure', label: 'Structure' },
+            { key: 'actionability', label: 'Actionability' },
+            { key: 'outputControl', label: 'Output Control' }
+        ];
+
+        aiDimensions.innerHTML = dimensions.map(dim => {
+            const score = scoreData.aiEvaluation[dim.key] || 0;
+            return `
+                <div class="dimension-row">
+                    <span class="dimension-label">${dim.label}</span>
+                    <div class="dimension-bar">
+                        <div class="dimension-fill" style="width: ${score * 10}%"></div>
+                    </div>
+                    <span class="dimension-score">${score}</span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // Strengths
+    const strengthsList = document.getElementById('strengths-list');
+    if (strengthsList && scoreData.aiEvaluation?.strengths) {
+        strengthsList.innerHTML = scoreData.aiEvaluation.strengths
+            .map(s => `<li>• ${s}</li>`).join('');
+    }
+
+    // Improvements
+    const improvementsList = document.getElementById('improvements-list');
+    if (improvementsList && scoreData.aiEvaluation?.improvements) {
+        improvementsList.innerHTML = scoreData.aiEvaluation.improvements
+            .map(s => `<li>• ${s}</li>`).join('');
+    }
+
+    // Brief Feedback
+    const briefFeedback = document.getElementById('brief-feedback');
+    if (briefFeedback && scoreData.aiEvaluation?.briefFeedback) {
+        briefFeedback.textContent = `"${scoreData.aiEvaluation.briefFeedback}"`;
     }
 
     // Show appropriate results section based on lab type

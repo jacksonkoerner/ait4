@@ -735,27 +735,214 @@ a:hover {
     background-clip: text;
 }
 
-.score-breakdown {
+/* Merit-Based Score Display */
+.score-grade {
     display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 1rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
 }
 
-.score-item {
-    text-align: center;
-}
-
-.score-item-value {
+.grade-label {
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--text-primary);
 }
 
-.score-item-label {
-    font-size: 0.75rem;
+.grade-stars {
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+}
+
+/* Score Breakdown Cards */
+.score-breakdown-detailed {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+@media (max-width: 768px) {
+    .score-breakdown-detailed {
+        grid-template-columns: 1fr;
+    }
+}
+
+.score-card {
+    background: var(--bg-dark);
+    border-radius: 12px;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+}
+
+.score-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.score-card-icon {
+    font-size: 1.25rem;
+}
+
+.score-card-title {
+    flex: 1;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.score-card-value {
+    font-weight: 700;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Technique Checklist */
+.technique-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.technique-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    padding: 0.375rem 0;
+}
+
+.technique-item.detected {
+    color: var(--accent);
+}
+
+.technique-item.missed {
     color: var(--text-muted);
+}
+
+.technique-check {
+    width: 20px;
+    text-align: center;
+}
+
+.technique-name {
+    flex: 1;
+}
+
+.technique-points {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+}
+
+/* AI Dimensions */
+.ai-dimensions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.dimension-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.dimension-label {
+    width: 100px;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.dimension-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--bg-card);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.dimension-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.dimension-score {
+    width: 30px;
+    text-align: right;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* AI Feedback Section */
+.ai-feedback-section {
+    margin: 2rem 0;
+}
+
+.feedback-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .feedback-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.feedback-card {
+    background: var(--bg-dark);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.feedback-card.strengths {
+    border-left: 3px solid var(--accent);
+}
+
+.feedback-card.improvements {
+    border-left: 3px solid var(--warning);
+}
+
+.feedback-card-header {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.feedback-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feedback-list li {
+    padding: 0.375rem 0;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+.brief-feedback {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(16, 185, 129, 0.1));
+    border: 1px solid var(--primary);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    text-align: center;
 }
 
 /* Takeaways */
