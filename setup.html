@@ -73,14 +73,8 @@
             font-size: 0.9375rem;
         }
 
-        .input-wrapper {
-            position: relative;
-            display: flex;
-            gap: 0.5rem;
-        }
-
         .setup-input {
-            flex: 1;
+            width: 100%;
             padding: 0.875rem 1rem;
             background: var(--bg-dark);
             border: 1px solid var(--border-color);
@@ -98,22 +92,6 @@
 
         .setup-input::placeholder {
             color: var(--text-muted);
-        }
-
-        .toggle-visibility-btn {
-            padding: 0.875rem 1rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 1.125rem;
-        }
-
-        .toggle-visibility-btn:hover {
-            background: var(--bg-card-hover);
-            color: var(--text-primary);
         }
 
         .verify-btn {
@@ -369,21 +347,16 @@
                 <div class="setup-form" id="setup-form">
                     <div class="form-group">
                         <label class="form-label" for="api-key-input">Your Gemini API Key</label>
-                        <div class="input-wrapper">
-                            <input
-                                type="password"
-                                id="api-key-input"
-                                class="setup-input"
-                                placeholder="Paste your API key here..."
-                                autocomplete="off"
-                            >
-                            <button type="button" class="toggle-visibility-btn" id="toggle-visibility" title="Show/Hide key">
-                                👁️
-                            </button>
-                        </div>
+                        <input
+                            type="text"
+                            id="api-key-input"
+                            class="setup-input"
+                            placeholder="Paste your API key here..."
+                            autocomplete="off"
+                        >
                     </div>
 
-                    <button class="btn btn-primary verify-btn" id="verify-btn" onclick="verifyAndContinue()">
+                    <button type="button" class="btn btn-primary verify-btn" id="verify-btn">
                         Verify & Continue
                     </button>
 
@@ -401,7 +374,7 @@
 
                 <!-- Expandable Instructions -->
                 <div class="expandable-section" id="expandable-section">
-                    <div class="expandable-header" onclick="toggleInstructions()">
+                    <div class="expandable-header">
                         <span>Need your own key?</span>
                         <span class="chevron">▼</span>
                     </div>
@@ -460,18 +433,19 @@
     <script>
         // Setup page specific JavaScript
         const SETUP_COMPLETE_KEY = 'aipromptlab_setup_complete';
-        let isKeyVisible = false;
+        const GEMINI_KEY = 'aipromptlab_gemini_key';
 
         document.addEventListener('DOMContentLoaded', function() {
             initSetupPage();
-            setupEventListeners();
         });
 
         function initSetupPage() {
             // Initialize API config to load any existing key
-            initializeApiConfig();
+            if (typeof initializeApiConfig === 'function') {
+                initializeApiConfig();
+            }
 
-            const existingKey = localStorage.getItem(STORAGE_KEYS.GEMINI_KEY);
+            const existingKey = localStorage.getItem(GEMINI_KEY);
             const setupComplete = localStorage.getItem(SETUP_COMPLETE_KEY) === 'true';
 
             if (setupComplete && existingKey) {
@@ -481,25 +455,27 @@
                 // Key exists but setup not marked complete - pre-fill the input
                 document.getElementById('api-key-input').value = existingKey;
             }
-        }
 
-        function setupEventListeners() {
-            // Toggle password visibility
-            const toggleBtn = document.getElementById('toggle-visibility');
-            const inputField = document.getElementById('api-key-input');
+            // Set up event listeners
+            var verifyBtn = document.getElementById('verify-btn');
+            var inputField = document.getElementById('api-key-input');
+            var expandableHeader = document.querySelector('.expandable-header');
 
-            toggleBtn.addEventListener('click', function() {
-                isKeyVisible = !isKeyVisible;
-                inputField.type = isKeyVisible ? 'text' : 'password';
-                toggleBtn.textContent = isKeyVisible ? '🙈' : '👁️';
-            });
+            if (verifyBtn) {
+                verifyBtn.addEventListener('click', verifyAndContinue);
+            }
 
-            // Enter key to submit
-            inputField.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    verifyAndContinue();
-                }
-            });
+            if (inputField) {
+                inputField.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        verifyAndContinue();
+                    }
+                });
+            }
+
+            if (expandableHeader) {
+                expandableHeader.addEventListener('click', toggleInstructions);
+            }
         }
 
         function showAlreadySetup() {
@@ -522,20 +498,20 @@
                 'Your previous key will be replaced with the new one after verification.';
 
             // Pre-fill existing key
-            const existingKey = localStorage.getItem(STORAGE_KEYS.GEMINI_KEY);
+            var existingKey = localStorage.getItem(GEMINI_KEY);
             if (existingKey) {
                 document.getElementById('api-key-input').value = existingKey;
             }
         }
 
         async function verifyAndContinue() {
-            const input = document.getElementById('api-key-input');
-            const verifyBtn = document.getElementById('verify-btn');
-            const successStatus = document.getElementById('success-status');
-            const errorStatus = document.getElementById('error-status');
-            const errorMessage = document.getElementById('error-message');
+            var input = document.getElementById('api-key-input');
+            var verifyBtn = document.getElementById('verify-btn');
+            var successStatus = document.getElementById('success-status');
+            var errorStatus = document.getElementById('error-status');
+            var errorMessage = document.getElementById('error-message');
 
-            const apiKey = input.value.trim();
+            var apiKey = input.value.trim();
 
             // Reset status
             successStatus.classList.remove('visible');
@@ -554,15 +530,29 @@
             verifyBtn.innerHTML = '<span class="spinner"></span> Verifying...';
 
             try {
-                // Temporarily save the key to test it
-                localStorage.setItem(STORAGE_KEYS.GEMINI_KEY, apiKey);
-                API_CONFIG.gemini.key = apiKey;
+                // Save the key to localStorage first
+                localStorage.setItem(GEMINI_KEY, apiKey);
 
-                // Test the API key
-                await testGeminiApi();
+                // Update API_CONFIG if available
+                if (typeof API_CONFIG !== 'undefined') {
+                    API_CONFIG.gemini.key = apiKey;
+                }
 
-                // Success! Save properly and mark setup complete
-                saveApiKey('gemini', apiKey);
+                // Test the API key by making a request to Gemini
+                var response = await fetch(
+                    'https://generativelanguage.googleapis.com/v1beta/models?key=' + apiKey,
+                    { method: 'GET' }
+                );
+
+                if (response.status === 400 || response.status === 401) {
+                    throw new Error('Invalid API key');
+                }
+
+                if (!response.ok) {
+                    throw new Error('Unable to verify API key');
+                }
+
+                // Success! Mark setup complete
                 localStorage.setItem(SETUP_COMPLETE_KEY, 'true');
 
                 // Show success state
@@ -570,6 +560,7 @@
                 verifyBtn.innerHTML = 'Start the Course →';
                 verifyBtn.classList.remove('btn-primary');
                 verifyBtn.classList.add('btn-accent');
+                verifyBtn.disabled = false;
                 verifyBtn.onclick = function() {
                     window.location.href = 'index.html';
                 };
@@ -585,8 +576,10 @@
                 errorStatus.classList.add('visible');
 
                 // Clear the invalid key
-                localStorage.removeItem(STORAGE_KEYS.GEMINI_KEY);
-                API_CONFIG.gemini.key = '';
+                localStorage.removeItem(GEMINI_KEY);
+                if (typeof API_CONFIG !== 'undefined') {
+                    API_CONFIG.gemini.key = '';
+                }
 
                 // Reset button
                 verifyBtn.disabled = false;
@@ -595,7 +588,7 @@
         }
 
         function toggleInstructions() {
-            const section = document.getElementById('expandable-section');
+            var section = document.getElementById('expandable-section');
             section.classList.toggle('expanded');
         }
     </script>
