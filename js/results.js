@@ -292,55 +292,154 @@ function prepareShareCanvas(progress, stats) {
     const ctx = canvas.getContext('2d');
     const width = canvas.width;
     const height = canvas.height;
+    const grade = getGradeLabel(stats.avgScore);
 
     // Background gradient
-    const gradient = ctx.createLinearGradient(0, 0, width, height);
-    gradient.addColorStop(0, '#0f172a');
-    gradient.addColorStop(1, '#1e293b');
-    ctx.fillStyle = gradient;
+    const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+    bgGradient.addColorStop(0, '#0f172a');
+    bgGradient.addColorStop(1, '#1e293b');
+    ctx.fillStyle = bgGradient;
     ctx.fillRect(0, 0, width, height);
 
-    // Title
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 48px Inter, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('🧪 AI Prompt Lab', width / 2, 80);
+    // Decorative gradient circles
+    ctx.globalAlpha = 0.15;
+    const circle1 = ctx.createRadialGradient(200, 150, 0, 200, 150, 300);
+    circle1.addColorStop(0, '#2563eb');
+    circle1.addColorStop(1, 'transparent');
+    ctx.fillStyle = circle1;
+    ctx.fillRect(0, 0, width, height);
 
-    // Score circle
-    ctx.beginPath();
-    ctx.arc(width / 2, 280, 120, 0, 2 * Math.PI);
-    ctx.strokeStyle = '#334155';
-    ctx.lineWidth = 16;
-    ctx.stroke();
+    const circle2 = ctx.createRadialGradient(1000, 500, 0, 1000, 500, 250);
+    circle2.addColorStop(0, '#10b981');
+    circle2.addColorStop(1, 'transparent');
+    ctx.fillStyle = circle2;
+    ctx.fillRect(0, 0, width, height);
+    ctx.globalAlpha = 1;
 
-    // Score arc
-    const scoreAngle = (stats.avgScore / 100) * 2 * Math.PI;
-    ctx.beginPath();
-    ctx.arc(width / 2, 280, 120, -Math.PI / 2, -Math.PI / 2 + scoreAngle);
-    ctx.strokeStyle = '#10b981';
-    ctx.lineWidth = 16;
-    ctx.lineCap = 'round';
-    ctx.stroke();
-
-    // Score text
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 72px JetBrains Mono, monospace';
-    ctx.fillText(stats.avgScore.toString(), width / 2, 300);
-    ctx.font = '24px Inter, sans-serif';
-    ctx.fillStyle = '#94a3b8';
-    ctx.fillText('/100', width / 2, 340);
-
-    // Grade
-    const grade = getGradeLabel(stats.avgScore);
+    // Logo/Title
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#f8fafc';
     ctx.font = 'bold 32px Inter, sans-serif';
+    ctx.fillText('🧪 AI Prompt Lab', 50, 60);
+
+    // "I Completed" text
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '24px Inter, sans-serif';
+    ctx.fillText('I completed the course!', 50, 110);
+
+    // Large Score
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = 'bold 140px Inter, sans-serif';
+    const scoreText = stats.avgScore.toString();
+    ctx.fillText(scoreText, 50, 280);
+
+    ctx.fillStyle = '#64748b';
+    ctx.font = 'bold 48px Inter, sans-serif';
+    ctx.fillText('/100', 50 + ctx.measureText(scoreText).width + 10, 280);
+
+    // Grade Label
     ctx.fillStyle = grade.color;
-    ctx.fillText(grade.label, width / 2, 440);
-    ctx.fillText(renderStars(grade.stars), width / 2, 480);
+    ctx.font = 'bold 36px Inter, sans-serif';
+    ctx.fillText(grade.label, 50, 340);
+
+    // Stars
+    ctx.font = '32px sans-serif';
+    ctx.fillText(renderStars(grade.stars), 50, 390);
+
+    // Lab Scores (right side)
+    const labX = 650;
+    let labY = 100;
+
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = 'bold 20px Inter, sans-serif';
+    ctx.fillText('SCORES BY LAB', labX, labY);
+    labY += 40;
+
+    const tracks = [
+        { name: 'Text & Content', icon: '📝', labs: [3, 4] },
+        { name: 'Finance & Data', icon: '📊', labs: [5, 6] },
+        { name: 'Marketing & Media', icon: '🎨', labs: [1, 2] }
+    ];
+
+    tracks.forEach(track => {
+        // Track header
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '16px Inter, sans-serif';
+        ctx.fillText(`${track.icon} ${track.name}`, labX, labY);
+        labY += 30;
+
+        // Labs
+        track.labs.forEach(id => {
+            const lab = LABS[id];
+            const score = progress.scores[id];
+            if (!lab || !score) return;
+            const labGrade = getGradeLabel(score.finalScore);
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = '14px Inter, sans-serif';
+            ctx.fillText(lab.title, labX + 20, labY);
+
+            ctx.fillStyle = labGrade.color;
+            ctx.font = 'bold 14px monospace';
+            ctx.fillText(`${score.finalScore}/100`, labX + 350, labY);
+
+            labY += 28;
+        });
+
+        labY += 15;
+    });
+
+    // Skill bars (bottom right)
+    const skillX = 650;
+    let skillY = 420;
+
+    ctx.fillStyle = '#f8fafc';
+    ctx.font = 'bold 16px Inter, sans-serif';
+    ctx.fillText('SKILLS', skillX, skillY);
+    skillY += 30;
+
+    const dimensions = [
+        { key: 'specificity', label: 'Specificity' },
+        { key: 'completeness', label: 'Completeness' },
+        { key: 'structure', label: 'Structure' },
+        { key: 'actionability', label: 'Actionability' },
+        { key: 'outputControl', label: 'Output Control' }
+    ];
+
+    dimensions.forEach(dim => {
+        const score = stats.avgDimensions[dim.key] || 0;
+
+        // Label
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '12px Inter, sans-serif';
+        ctx.fillText(dim.label, skillX, skillY);
+
+        // Bar background
+        ctx.fillStyle = '#334155';
+        ctx.fillRect(skillX + 100, skillY - 10, 150, 12);
+
+        // Bar fill
+        const barGradient = ctx.createLinearGradient(skillX + 100, 0, skillX + 250, 0);
+        barGradient.addColorStop(0, '#2563eb');
+        barGradient.addColorStop(1, '#10b981');
+        ctx.fillStyle = barGradient;
+        ctx.fillRect(skillX + 100, skillY - 10, 150 * (score / 10), 12);
+
+        // Score
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = 'bold 12px monospace';
+        ctx.fillText(score.toFixed(1), skillX + 260, skillY);
+
+        skillY += 28;
+    });
 
     // Footer
-    ctx.font = '20px Inter, sans-serif';
     ctx.fillStyle = '#64748b';
-    ctx.fillText('Completed 6 AI Prompting Labs', width / 2, 560);
+    ctx.font = '16px Inter, sans-serif';
+    ctx.fillText('Completed 6 AI Prompting Labs', 50, height - 40);
+
+    ctx.fillStyle = '#10b981';
+    ctx.fillText('Powered by AI Prompt Lab', 50, height - 15);
 }
 
 function downloadShareImage() {
@@ -358,13 +457,35 @@ function downloadShareImage() {
 function copyShareText() {
     const progress = getUserProgress();
     const stats = calculateOverallStats(progress);
+    const grade = getGradeLabel(stats.avgScore);
 
-    const text = `🧪 I completed AI Prompt Lab!
+    // Build lab scores text
+    const labScores = [];
+    const tracks = [
+        { name: 'Text & Content', icon: '📝', labs: [3, 4] },
+        { name: 'Finance & Data', icon: '📊', labs: [5, 6] },
+        { name: 'Marketing & Media', icon: '🎨', labs: [1, 2] }
+    ];
 
-📊 My Score: ${stats.avgScore}/100
-⭐ Grade: ${getGradeLabel(stats.avgScore).label}
+    tracks.forEach(track => {
+        track.labs.forEach(id => {
+            const lab = LABS[id];
+            const score = progress.scores[id];
+            if (lab && score) {
+                labScores.push(`${track.icon} ${lab.title}: ${score.finalScore}/100`);
+            }
+        });
+    });
 
-Skills breakdown:
+    const text = `🎓 I completed AI Prompt Lab!
+
+📊 Overall Score: ${stats.avgScore}/100 (${grade.label})
+${'⭐'.repeat(grade.stars)}${'☆'.repeat(5 - grade.stars)}
+
+My Results:
+${labScores.join('\n')}
+
+Skills:
 - Specificity: ${stats.avgDimensions.specificity}/10
 - Completeness: ${stats.avgDimensions.completeness}/10
 - Structure: ${stats.avgDimensions.structure}/10
@@ -374,7 +495,7 @@ Skills breakdown:
 #AIPromptLab #PromptEngineering`;
 
     navigator.clipboard.writeText(text).then(() => {
-        showToast('Copied to clipboard!', 'success');
+        showToast('Results copied to clipboard!', 'success');
     }).catch(() => {
         showToast('Failed to copy', 'error');
     });
