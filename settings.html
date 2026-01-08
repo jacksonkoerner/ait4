@@ -43,6 +43,28 @@
                 <p>Configure your Gemini API key to enable image and text generation. Your key is stored locally in your browser and never sent to our servers.</p>
             </div>
 
+            <!-- Setup Status -->
+            <div class="api-card" id="setup-status-card">
+                <div class="api-card-header" style="border-bottom: none; padding-bottom: 0;">
+                    <div class="api-info">
+                        <div class="api-icon">🚀</div>
+                        <div>
+                            <div class="api-name">Setup Status</div>
+                            <div class="api-description" id="setup-status-text">Checking...</div>
+                        </div>
+                    </div>
+                    <div class="api-status" id="setup-status">
+                        <span class="status-dot not-configured" id="setup-status-dot"></span>
+                        <span class="status-text" id="setup-status-label">Checking</span>
+                    </div>
+                </div>
+                <div id="setup-action" style="margin-top: 1rem; display: none;">
+                    <a href="setup.html" class="btn btn-primary" style="display: inline-flex;">
+                        Go to Setup →
+                    </a>
+                </div>
+            </div>
+
             <!-- Google Gemini -->
             <div class="api-card">
                 <div class="api-card-header">
@@ -129,6 +151,37 @@
     <script src="js/api.js"></script>
     <script src="js/app.js"></script>
     <script>
+        // Setup status constants
+        const SETUP_COMPLETE_KEY = 'aipromptlab_setup_complete';
+
+        // Update setup status on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSetupStatus();
+        });
+
+        function updateSetupStatus() {
+            const setupComplete = localStorage.getItem(SETUP_COMPLETE_KEY) === 'true';
+            const hasApiKey = !!localStorage.getItem(STORAGE_KEYS.GEMINI_KEY);
+            const isComplete = setupComplete && hasApiKey;
+
+            const statusDot = document.getElementById('setup-status-dot');
+            const statusLabel = document.getElementById('setup-status-label');
+            const statusText = document.getElementById('setup-status-text');
+            const setupAction = document.getElementById('setup-action');
+
+            if (isComplete) {
+                statusDot.className = 'status-dot configured';
+                statusLabel.textContent = 'Complete ✓';
+                statusText.textContent = 'You\'re all set! Your API key is configured and ready to use.';
+                setupAction.style.display = 'none';
+            } else {
+                statusDot.className = 'status-dot not-configured';
+                statusLabel.textContent = 'Not complete';
+                statusText.textContent = 'Complete the setup to unlock the full AI Prompt Lab experience.';
+                setupAction.style.display = 'block';
+            }
+        }
+
         function handleResetAll() {
             if (confirm('Are you sure you want to reset all data? This will clear your progress and API keys.')) {
                 localStorage.clear();

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup | AI Prompt Lab</title>
+    <meta name="description" content="Set up your Gemini API key to unlock the full AI Prompt Lab experience.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+
+    <style>
+        /* Setup Page Specific Styles */
+        .setup-container {
+            padding-top: 6rem;
+            min-height: 100vh;
+        }
+
+        .setup-card {
+            max-width: 560px;
+            margin: 2rem auto;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .setup-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .setup-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .setup-header .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .setup-header .explanation {
+            color: var(--text-muted);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+        }
+
+        .setup-form {
+            margin-top: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.9375rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .setup-input {
+            flex: 1;
+            padding: 0.875rem 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9375rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .setup-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .setup-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .toggle-visibility-btn {
+            padding: 0.875rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1.125rem;
+        }
+
+        .toggle-visibility-btn:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .verify-btn .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Status States */
+        .status-box {
+            display: none;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-box.visible {
+            display: flex;
+        }
+
+        .status-box.success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--success);
+        }
+
+        .status-box.error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--danger);
+        }
+
+        .status-box .status-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .status-box .status-message {
+            flex: 1;
+            font-size: 0.9375rem;
+        }
+
+        /* Already Set Up State */
+        .already-setup {
+            display: none;
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        .already-setup.visible {
+            display: block;
+        }
+
+        .already-setup h3 {
+            color: var(--success);
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .already-setup p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            margin-bottom: 1rem;
+        }
+
+        .already-setup-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        /* Expandable Section */
+        .expandable-section {
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+        }
+
+        .expandable-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            padding: 0.75rem 0;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .expandable-header:hover {
+            color: var(--primary);
+        }
+
+        .expandable-header .chevron {
+            transition: transform 0.3s ease;
+        }
+
+        .expandable-section.expanded .expandable-header .chevron {
+            transform: rotate(180deg);
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.2s ease;
+            opacity: 0;
+        }
+
+        .expandable-section.expanded .expandable-content {
+            max-height: 400px;
+            opacity: 1;
+        }
+
+        .instructions-list {
+            padding: 1rem 0;
+        }
+
+        .instruction-step {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8125rem;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.5;
+            padding-top: 0.25rem;
+        }
+
+        .step-content a {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .step-content a:hover {
+            color: var(--accent);
+        }
+
+        .instructions-note {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .instructions-note strong {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .setup-card {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .setup-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .already-setup-actions {
+                flex-direction: column;
+            }
+
+            .already-setup-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🧪</div>
+                <span class="logo-text">AI Prompt Lab</span>
+            </a>
+            <nav class="header-nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="settings.html" class="settings-btn" title="Settings">
+                    ⚙️
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="setup-container">
+        <div class="container">
+            <div class="setup-card">
+                <!-- Already Set Up Notice -->
+                <div class="already-setup" id="already-setup">
+                    <h3>You're Already Set Up!</h3>
+                    <p>Your API key is configured and ready to go.</p>
+                    <div class="already-setup-actions">
+                        <a href="index.html" class="btn btn-primary">Start the Course</a>
+                        <button class="btn btn-secondary" onclick="showChangeKeyForm()">Change API Key</button>
+                    </div>
+                </div>
+
+                <!-- Setup Header -->
+                <div class="setup-header" id="setup-header">
+                    <h1>Before We Begin</h1>
+                    <p class="subtitle">One quick setup step to unlock the full experience</p>
+                    <p class="explanation">
+                        You'll need a Gemini API key to see your prompts generate real AI outputs.
+                        Your instructor may have provided one - if so, paste it below.
+                    </p>
+                </div>
+
+                <!-- Setup Form -->
+                <div class="setup-form" id="setup-form">
+                    <div class="form-group">
+                        <label class="form-label" for="api-key-input">Your Gemini API Key</label>
+                        <div class="input-wrapper">
+                            <input
+                                type="password"
+                                id="api-key-input"
+                                class="setup-input"
+                                placeholder="Paste your API key here..."
+                                autocomplete="off"
+                            >
+                            <button type="button" class="toggle-visibility-btn" id="toggle-visibility" title="Show/Hide key">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary verify-btn" id="verify-btn" onclick="verifyAndContinue()">
+                        Verify & Continue
+                    </button>
+
+                    <!-- Status Messages -->
+                    <div class="status-box success" id="success-status">
+                        <span class="status-icon">✓</span>
+                        <span class="status-message">API key verified!</span>
+                    </div>
+
+                    <div class="status-box error" id="error-status">
+                        <span class="status-icon">✕</span>
+                        <span class="status-message" id="error-message">Invalid API key. Please check and try again.</span>
+                    </div>
+                </div>
+
+                <!-- Expandable Instructions -->
+                <div class="expandable-section" id="expandable-section">
+                    <div class="expandable-header" onclick="toggleInstructions()">
+                        <span>Need your own key?</span>
+                        <span class="chevron">▼</span>
+                    </div>
+                    <div class="expandable-content">
+                        <div class="instructions-list">
+                            <div class="instruction-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    Go to <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">aistudio.google.com/app/apikey</a>
+                                </div>
+                            </div>
+                            <div class="instruction-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    Sign in with your Google account
+                                </div>
+                            </div>
+                            <div class="instruction-step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    Click "Create API Key" and select any project
+                                </div>
+                            </div>
+                            <div class="instruction-step">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    Copy the key and paste it above
+                                </div>
+                            </div>
+                        </div>
+                        <div class="instructions-note">
+                            <strong>Note:</strong> This is free and takes about 2 minutes
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">
+                Powered by <a href="https://kteanalytics.com/workshops-training/" target="_blank" rel="noopener">KTE Analytics</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="js/labs.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Setup page specific JavaScript
+        const SETUP_COMPLETE_KEY = 'aipromptlab_setup_complete';
+        let isKeyVisible = false;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initSetupPage();
+            setupEventListeners();
+        });
+
+        function initSetupPage() {
+            // Initialize API config to load any existing key
+            initializeApiConfig();
+
+            const existingKey = localStorage.getItem(STORAGE_KEYS.GEMINI_KEY);
+            const setupComplete = localStorage.getItem(SETUP_COMPLETE_KEY) === 'true';
+
+            if (setupComplete && existingKey) {
+                // Show "already set up" state
+                showAlreadySetup();
+            } else if (existingKey) {
+                // Key exists but setup not marked complete - pre-fill the input
+                document.getElementById('api-key-input').value = existingKey;
+            }
+        }
+
+        function setupEventListeners() {
+            // Toggle password visibility
+            const toggleBtn = document.getElementById('toggle-visibility');
+            const inputField = document.getElementById('api-key-input');
+
+            toggleBtn.addEventListener('click', function() {
+                isKeyVisible = !isKeyVisible;
+                inputField.type = isKeyVisible ? 'text' : 'password';
+                toggleBtn.textContent = isKeyVisible ? '🙈' : '👁️';
+            });
+
+            // Enter key to submit
+            inputField.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    verifyAndContinue();
+                }
+            });
+        }
+
+        function showAlreadySetup() {
+            document.getElementById('already-setup').classList.add('visible');
+            document.getElementById('setup-header').style.display = 'none';
+            document.getElementById('setup-form').style.display = 'none';
+            document.getElementById('expandable-section').style.display = 'none';
+        }
+
+        function showChangeKeyForm() {
+            document.getElementById('already-setup').classList.remove('visible');
+            document.getElementById('setup-header').style.display = 'block';
+            document.getElementById('setup-form').style.display = 'block';
+            document.getElementById('expandable-section').style.display = 'block';
+
+            // Update header text for changing key
+            document.querySelector('.setup-header h1').textContent = 'Change Your API Key';
+            document.querySelector('.setup-header .subtitle').textContent = 'Enter a new Gemini API key below';
+            document.querySelector('.setup-header .explanation').textContent =
+                'Your previous key will be replaced with the new one after verification.';
+
+            // Pre-fill existing key
+            const existingKey = localStorage.getItem(STORAGE_KEYS.GEMINI_KEY);
+            if (existingKey) {
+                document.getElementById('api-key-input').value = existingKey;
+            }
+        }
+
+        async function verifyAndContinue() {
+            const input = document.getElementById('api-key-input');
+            const verifyBtn = document.getElementById('verify-btn');
+            const successStatus = document.getElementById('success-status');
+            const errorStatus = document.getElementById('error-status');
+            const errorMessage = document.getElementById('error-message');
+
+            const apiKey = input.value.trim();
+
+            // Reset status
+            successStatus.classList.remove('visible');
+            errorStatus.classList.remove('visible');
+
+            // Validate input
+            if (!apiKey) {
+                errorMessage.textContent = 'Please enter an API key.';
+                errorStatus.classList.add('visible');
+                input.focus();
+                return;
+            }
+
+            // Show loading state
+            verifyBtn.disabled = true;
+            verifyBtn.innerHTML = '<span class="spinner"></span> Verifying...';
+
+            try {
+                // Temporarily save the key to test it
+                localStorage.setItem(STORAGE_KEYS.GEMINI_KEY, apiKey);
+                API_CONFIG.gemini.key = apiKey;
+
+                // Test the API key
+                await testGeminiApi();
+
+                // Success! Save properly and mark setup complete
+                saveApiKey('gemini', apiKey);
+                localStorage.setItem(SETUP_COMPLETE_KEY, 'true');
+
+                // Show success state
+                successStatus.classList.add('visible');
+                verifyBtn.innerHTML = 'Start the Course →';
+                verifyBtn.classList.remove('btn-primary');
+                verifyBtn.classList.add('btn-accent');
+                verifyBtn.onclick = function() {
+                    window.location.href = 'index.html';
+                };
+
+                // Auto-redirect after a moment
+                setTimeout(function() {
+                    window.location.href = 'index.html';
+                }, 1000);
+
+            } catch (error) {
+                // Error - show error state
+                errorMessage.textContent = error.message || 'Invalid API key. Please check and try again.';
+                errorStatus.classList.add('visible');
+
+                // Clear the invalid key
+                localStorage.removeItem(STORAGE_KEYS.GEMINI_KEY);
+                API_CONFIG.gemini.key = '';
+
+                // Reset button
+                verifyBtn.disabled = false;
+                verifyBtn.innerHTML = 'Verify & Continue';
+            }
+        }
+
+        function toggleInstructions() {
+            const section = document.getElementById('expandable-section');
+            section.classList.toggle('expanded');
+        }
+    </script>
+</body>
+</html>
