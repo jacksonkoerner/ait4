@@ -1011,6 +1011,17 @@ function displayResults(userPrompt, scoreData) {
             .map(t => `<li>${t}</li>`)
             .join('');
     }
+
+    // Update Next button text for last lab
+    const nextBtn = document.getElementById('next-btn');
+    const nextLab = getNextLab(currentLab.id);
+    if (nextBtn) {
+        if (nextLab) {
+            nextBtn.innerHTML = 'Next Lab →';
+        } else {
+            nextBtn.innerHTML = '🎓 See Your Results →';
+        }
+    }
 }
 
 /**
