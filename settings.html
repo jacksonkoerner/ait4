@@ -124,12 +124,26 @@
             <!-- Danger Zone -->
             <div class="api-card" style="border-color: var(--danger);">
                 <h3 style="margin-bottom: 1rem; color: var(--danger);">⚠️ Danger Zone</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                    Reset all progress and clear stored API keys. This action cannot be undone.
-                </p>
-                <button class="btn btn-outline" style="border-color: var(--danger); color: var(--danger);" onclick="handleResetAll()">
-                    🗑️ Reset All Data
-                </button>
+
+                <!-- Reset Course Progress -->
+                <div style="margin-bottom: 1.5rem;">
+                    <p style="color: var(--text-secondary); margin-bottom: 0.75rem;">
+                        Reset your course progress and scores. Your API key will be kept.
+                    </p>
+                    <button class="btn btn-outline" style="border-color: var(--warning); color: var(--warning);" onclick="handleResetCourseProgress()">
+                        🔄 Reset Course Progress
+                    </button>
+                </div>
+
+                <!-- Reset All Data -->
+                <div style="border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                    <p style="color: var(--text-secondary); margin-bottom: 0.75rem;">
+                        Reset everything including your API key. This action cannot be undone.
+                    </p>
+                    <button class="btn btn-outline" style="border-color: var(--danger); color: var(--danger);" onclick="handleResetAll()">
+                        🗑️ Reset All Data
+                    </button>
+                </div>
             </div>
         </div>
     </main>
@@ -182,9 +196,24 @@
             }
         }
 
+        function handleResetCourseProgress() {
+            if (confirm('Are you sure you want to reset your course progress? Your API key will be kept.')) {
+                // Only remove progress and setup completion, keep API key
+                localStorage.removeItem('aipromptlab_progress');
+                localStorage.removeItem(SETUP_COMPLETE_KEY);
+                showToast('Course progress has been reset', 'success');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            }
+        }
+
         function handleResetAll() {
-            if (confirm('Are you sure you want to reset all data? This will clear your progress and API keys.')) {
-                localStorage.clear();
+            if (confirm('Are you sure you want to reset ALL data? This will clear your progress AND your API key.')) {
+                // Clear everything
+                localStorage.removeItem('aipromptlab_progress');
+                localStorage.removeItem(SETUP_COMPLETE_KEY);
+                localStorage.removeItem(STORAGE_KEYS.GEMINI_KEY);
                 showToast('All data has been reset', 'success');
                 setTimeout(() => {
                     window.location.reload();
