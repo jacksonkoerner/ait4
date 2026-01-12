@@ -200,7 +200,11 @@
             if (confirm('Are you sure you want to reset your course progress? Your API key will be kept.')) {
                 // Only remove progress and setup completion, keep API key
                 localStorage.removeItem('aipromptlab_progress');
-                localStorage.removeItem(SETUP_COMPLETE_KEY);
+                localStorage.removeItem('aipromptlab_setup_complete');
+
+                // Update setup status immediately
+                updateSetupStatus();
+
                 showToast('Course progress has been reset', 'success');
                 setTimeout(() => {
                     window.location.reload();
@@ -210,10 +214,34 @@
 
         function handleResetAll() {
             if (confirm('Are you sure you want to reset ALL data? This will clear your progress AND your API key.')) {
-                // Clear everything
+                // Clear everything using direct string keys
                 localStorage.removeItem('aipromptlab_progress');
-                localStorage.removeItem(SETUP_COMPLETE_KEY);
-                localStorage.removeItem(STORAGE_KEYS.GEMINI_KEY);
+                localStorage.removeItem('aipromptlab_setup_complete');
+                localStorage.removeItem('aipromptlab_gemini_key');
+
+                // Clear the API key input field
+                const geminiInput = document.getElementById('gemini-key');
+                if (geminiInput) {
+                    geminiInput.value = '';
+                }
+
+                // Update Gemini status to not configured
+                const geminiStatus = document.getElementById('gemini-status');
+                if (geminiStatus) {
+                    const dot = geminiStatus.querySelector('.status-dot');
+                    const text = geminiStatus.querySelector('.status-text');
+                    if (dot) dot.className = 'status-dot not-configured';
+                    if (text) text.textContent = 'Not configured';
+                }
+
+                // Update setup status
+                updateSetupStatus();
+
+                // Clear in-memory API config if it exists
+                if (typeof API_CONFIG !== 'undefined' && API_CONFIG.gemini) {
+                    API_CONFIG.gemini.key = '';
+                }
+
                 showToast('All data has been reset', 'success');
                 setTimeout(() => {
                     window.location.reload();
